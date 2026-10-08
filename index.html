@@ -290,30 +290,42 @@ canvas {
 }
 
 /* =========================
-   LANDSCAPE
+   PORTRAIT FIRST
 ========================= */
 
-@media (orientation: landscape) and (max-height: 500px) {
+@media (orientation: landscape) {
+
+  #game {
+    max-width: 430px;
+  }
+
+}
+
+/* =========================
+   SMALL SCREENS
+========================= */
+
+@media (max-height: 700px) {
 
   #controls {
-    padding-bottom: 8px;
+    bottom: 8px;
   }
 
   #joystick {
-    width: 105px;
-    height: 105px;
+    width: 112px;
+    height: 112px;
   }
 
   #stick {
-    width: 48px;
-    height: 48px;
+    width: 50px;
+    height: 50px;
 
-    left: 28px;
-    top: 28px;
+    left: 31px;
+    top: 31px;
   }
 
   .action {
-    height: 48px;
+    height: 50px;
   }
 
 }
@@ -520,6 +532,10 @@ let W = 0;
 let H = 0;
 
 
+/* =========================
+   RESIZE
+========================= */
+
 function resize() {
 
   const rect =
@@ -548,6 +564,13 @@ function resize() {
     0,
     0
   );
+
+  if (player && enemy) {
+
+    keepPlayersOnTheirSides();
+
+  }
+
 }
 
 
@@ -588,6 +611,82 @@ let blocking = false;
 let player;
 
 let enemy;
+
+
+/* =========================
+   ARENA BOUNDS
+========================= */
+
+function arenaTop() {
+
+  return 70;
+
+}
+
+
+function arenaBottom() {
+
+  return H - 105;
+
+}
+
+
+function arenaHeight() {
+
+  return arenaBottom() -
+         arenaTop();
+
+}
+
+
+function centerLine() {
+
+  return (
+    arenaTop() +
+    arenaBottom()
+  ) / 2;
+
+}
+
+
+/*
+   BLUE PLAYER:
+
+   Bottom half
+*/
+
+function playerTopLimit() {
+
+  return centerLine() + 18;
+
+}
+
+
+function playerBottomLimit() {
+
+  return arenaBottom() - 22;
+
+}
+
+
+/*
+   RED ENEMY:
+
+   Top half
+*/
+
+function enemyTopLimit() {
+
+  return arenaTop() + 22;
+
+}
+
+
+function enemyBottomLimit() {
+
+  return centerLine() - 18;
+
+}
 
 
 /* =========================
@@ -704,6 +803,53 @@ function getEnemyColor() {
 
 
 /* =========================
+   KEEP PLAYERS ON SIDES
+========================= */
+
+function keepPlayersOnTheirSides() {
+
+  if (!player || !enemy) {
+    return;
+  }
+
+
+  /* Blue player = bottom */
+
+  player.x =
+    clamp(
+      player.x,
+      42,
+      W - 42
+    );
+
+  player.y =
+    clamp(
+      player.y,
+      playerTopLimit(),
+      playerBottomLimit()
+    );
+
+
+  /* Red enemy = top */
+
+  enemy.x =
+    clamp(
+      enemy.x,
+      42,
+      W - 42
+    );
+
+  enemy.y =
+    clamp(
+      enemy.y,
+      enemyTopLimit(),
+      enemyBottomLimit()
+    );
+
+}
+
+
+/* =========================
    DISC
 ========================= */
 
@@ -770,17 +916,23 @@ function resetGame() {
   projectiles = [];
 
 
+  const middle =
+    centerLine();
+
+
+  /* =========================
+     BLUE PLAYER
+     BOTTOM
+  ========================= */
+
   player = {
 
     x:
-      W * .28,
+      W / 2,
 
     y:
-      H * .5,
-
-    /*
-       FASTER PLAYER
-    */
+      middle +
+      arenaHeight() * .25,
 
     radius: 14,
 
@@ -793,17 +945,19 @@ function resetGame() {
   };
 
 
+  /* =========================
+     RED ENEMY
+     TOP
+  ========================= */
+
   enemy = {
 
     x:
-      W * .72,
+      W / 2,
 
     y:
-      H * .5,
-
-    /*
-       FASTER ENEMY
-    */
+      middle -
+      arenaHeight() * .25,
 
     radius: 14,
 
@@ -817,17 +971,12 @@ function resetGame() {
 
     hitFlash: 0,
 
-    /*
-       NEW:
-       Enemy must recover its
-       disc or hit the player
-       before throwing again.
-    */
-
     discRecovered: true
 
   };
 
+
+  keepPlayersOnTheirSides();
 
   updateHUD();
 
@@ -835,7 +984,7 @@ function resetGame() {
 
 
 /* =========================
-   PLAYER ACTIONS
+   PLAYER THROW
 ========================= */
 
 function throwDisc() {
@@ -852,6 +1001,11 @@ function throwDisc() {
 
   }
 
+
+  /*
+     Always throw toward
+     the red player.
+  */
 
   const angle =
     angleTo(
@@ -922,17 +1076,14 @@ function dash() {
     .1
   ) {
 
-    const a =
-      angleTo(
-        player,
-        enemy
-      );
+    /*
+       Default dash is
+       straight backward.
+    */
 
-    dx =
-      Math.cos(a) * -1;
+    dx = 0;
 
-    dy =
-      Math.sin(a) * -1;
+    dy = 1;
 
   }
 
@@ -957,16 +1108,16 @@ function dash() {
   player.x =
     clamp(
       player.x,
-      40,
-      W - 40
+      42,
+      W - 42
     );
 
 
   player.y =
     clamp(
       player.y,
-      85,
-      H - 130
+      playerTopLimit(),
+      playerBottomLimit()
     );
 
 
@@ -988,17 +1139,10 @@ function dash() {
 
 
 /* =========================
-   ENEMY
+   ENEMY ATTACK
 ========================= */
 
 function enemyAttack() {
-
-  /*
-     Enemy may only throw when
-     its previous disc has been
-     recovered or has hit the
-     player.
-  */
 
   if (
     !enemy.discRecovered
@@ -1017,6 +1161,11 @@ function enemyAttack() {
 
   }
 
+
+  /*
+     Enemy throws toward
+     the blue player.
+  */
 
   const angle =
     angleTo(
@@ -1039,12 +1188,6 @@ function enemyAttack() {
 
   );
 
-
-  /*
-     The enemy now has to wait
-     for this disc to return
-     or hit the player.
-  */
 
   enemy.discRecovered =
     false;
@@ -1094,17 +1237,17 @@ function defeatEnemy() {
     enemy.health;
 
 
+  /*
+     Respawn RED at top center.
+  */
+
   enemy.x =
-    W * .72;
+    W / 2;
 
 
   enemy.y =
-    H *
-    (
-      .35 +
-      Math.random() *
-      .3
-    );
+    centerLine() -
+    arenaHeight() * .25;
 
 
   enemy.speed =
@@ -1116,12 +1259,23 @@ function defeatEnemy() {
     true;
 
 
+  enemy.cooldown =
+    .9;
+
+
+  /*
+     Small reward for winning
+     a round.
+  */
+
   energy =
     Math.min(
       100,
       energy + 15
     );
 
+
+  keepPlayersOnTheirSides();
 
   updateHUD();
 
@@ -1197,19 +1351,24 @@ function update(dt) {
   }
 
 
+  /*
+     BLUE CANNOT ENTER
+     RED'S SIDE.
+  */
+
   player.x =
     clamp(
       player.x,
-      40,
-      W - 40
+      42,
+      W - 42
     );
 
 
   player.y =
     clamp(
       player.y,
-      85,
-      H - 130
+      playerTopLimit(),
+      playerBottomLimit()
     );
 
 
@@ -1224,48 +1383,66 @@ function update(dt) {
     );
 
 
-  if (dist > 180) {
+  /*
+     RED moves horizontally
+     to line up with BLUE.
 
-    const a =
-      angleTo(
-        enemy,
-        player
-      );
+     It can also move slightly
+     vertically inside its own
+     half, but never crosses
+     the center.
+  */
 
+  const horizontalDifference =
+    player.x -
+    enemy.x;
+
+
+  if (
+    Math.abs(horizontalDifference) > 18
+  ) {
 
     enemy.x +=
-      Math.cos(a) *
-      enemy.speed *
-      dt;
-
-
-    enemy.y +=
-      Math.sin(a) *
+      Math.sign(
+        horizontalDifference
+      ) *
       enemy.speed *
       dt;
 
   }
-  else {
-
-    const a =
-      angleTo(
-        enemy,
-        player
-      ) +
-      Math.PI / 2;
 
 
-    enemy.x +=
-      Math.cos(a) *
-      enemy.speed *
-      .55 *
-      dt;
+  /*
+     Keep the enemy moving
+     around its top zone instead
+     of directly chasing through
+     the center.
+  */
 
+  const desiredEnemyY =
+    centerLine() -
+    arenaHeight() * .28;
+
+
+  if (
+    enemy.y <
+    desiredEnemyY - 25
+  ) {
 
     enemy.y +=
-      Math.sin(a) *
       enemy.speed *
-      .55 *
+      .35 *
+      dt;
+
+  }
+  else if (
+    enemy.y >
+    desiredEnemyY + 25
+  ) {
+
+    enemy.y -=
+      enemy.speed *
+      .35 *
       dt;
 
   }
@@ -1274,31 +1451,26 @@ function update(dt) {
   enemy.x =
     clamp(
       enemy.x,
-      40,
-      W - 40
+      42,
+      W - 42
     );
 
 
   enemy.y =
     clamp(
       enemy.y,
-      85,
-      H - 130
+      enemyTopLimit(),
+      enemyBottomLimit()
     );
 
 
-  /*
-     Enemy attacks only when:
-
-     1. Cooldown is ready
-     2. Player is within range
-     3. No enemy disc is flying
-     4. Previous disc was recovered
-  */
+  /* =========================
+     ENEMY ATTACK
+  ========================= */
 
   if (
     enemy.cooldown <= 0 &&
-    dist < 520 &&
+    dist < 620 &&
     !hasActiveDisc("enemy") &&
     enemy.discRecovered
   ) {
@@ -1344,7 +1516,7 @@ function update(dt) {
 
 
     /* =========================
-       ARENA WALLS
+       SIDE WALLS
     ========================= */
 
     if (
@@ -1364,9 +1536,13 @@ function update(dt) {
     }
 
 
+    /* =========================
+       TOP / BOTTOM WALLS
+    ========================= */
+
     if (
-      p.y < 70 ||
-      p.y > H - 115
+      p.y < arenaTop() ||
+      p.y > arenaBottom()
     ) {
 
       p.vy *= -1;
@@ -1374,15 +1550,15 @@ function update(dt) {
       p.y =
         clamp(
           p.y,
-          70,
-          H - 115
+          arenaTop(),
+          arenaBottom()
         );
 
     }
 
 
     /* =========================
-       ENEMY CATCHES ITS DISC
+       ENEMY CATCHES DISC
     ========================= */
 
     if (
@@ -1394,13 +1570,6 @@ function update(dt) {
       p.radius +
       enemy.radius
     ) {
-
-      /*
-         The enemy caught/recovered
-         its disc.
-
-         It may now throw again.
-      */
 
       enemy.discRecovered =
         true;
@@ -1486,12 +1655,8 @@ function update(dt) {
     ) {
 
       /*
-         The enemy's disc has now
-         completed its attack.
-
-         Whether blocked or not,
-         the enemy is allowed to
-         throw again afterward.
+         Enemy gets its disc
+         back after contact.
       */
 
       enemy.discRecovered =
@@ -1563,54 +1728,18 @@ function update(dt) {
     }
 
 
-    /*
-       IMPORTANT:
-       Enemy discs no longer
-       become available just
-       because they expire.
-
-       If the enemy disc reaches
-       its 3-second lifetime without
-       catching the enemy or hitting
-       the player, it disappears,
-       but the enemy still cannot
-       throw again.
-
-       This keeps the rule strict:
-       catch it OR hit the player.
-    */
+    /* =========================
+       DISC LIFETIME
+    ========================= */
 
     if (
       p.life <= 0
     ) {
 
-      if (
-        p.owner === "player"
-      ) {
-
-        projectiles.splice(
-          i,
-          1
-        );
-
-      }
-      else {
-
-        /*
-           Keep the enemy's disc
-           state locked.
-
-           Remove the visual disc,
-           but the enemy must wait
-           for a valid recovery/hit.
-        */
-
-        projectiles.splice(
-          i,
-          1
-        );
-
-      }
+      projectiles.splice(
+        i,
+        1
+      );
 
     }
 
@@ -1694,7 +1823,6 @@ function drawArena() {
 
       W / 2,
       H / 2,
-
       Math.max(W, H) *
       .7
 
@@ -1725,19 +1853,25 @@ function drawArena() {
   );
 
 
-  const arenaTop = 70;
+  const top =
+    arenaTop();
 
-  const arenaBottom =
-    H - 105;
+  const bottom =
+    arenaBottom();
+
+  const middle =
+    centerLine();
 
 
-  /* Grid */
+  /* =========================
+     GRID
+  ========================= */
 
   ctx.save();
 
 
   ctx.strokeStyle =
-    "rgba(80,180,220,.18)";
+    "rgba(80,180,220,.15)";
 
   ctx.lineWidth = 1;
 
@@ -1752,12 +1886,12 @@ function drawArena() {
 
     ctx.moveTo(
       x,
-      arenaTop
+      top
     );
 
     ctx.lineTo(
       x,
-      arenaBottom
+      bottom
     );
 
     ctx.stroke();
@@ -1766,8 +1900,8 @@ function drawArena() {
 
 
   for (
-    let y = arenaTop;
-    y < arenaBottom;
+    let y = top;
+    y < bottom;
     y += 35
   ) {
 
@@ -1791,7 +1925,9 @@ function drawArena() {
   ctx.restore();
 
 
-  /* Boundary */
+  /* =========================
+     ARENA BORDER
+  ========================= */
 
   ctx.save();
 
@@ -1804,67 +1940,130 @@ function drawArena() {
 
   ctx.strokeRect(
     25,
-    arenaTop,
+    top,
     W - 50,
-    arenaBottom -
-      arenaTop
+    bottom - top
   );
 
 
   ctx.strokeStyle =
-    "rgba(0,190,255,.1)";
+    "rgba(0,190,255,.08)";
 
   ctx.lineWidth = 12;
 
 
   ctx.strokeRect(
     25,
-    arenaTop,
+    top,
     W - 50,
-    arenaBottom -
-      arenaTop
+    bottom - top
   );
 
 
   ctx.restore();
 
 
-  /* Center circle */
+  /* =========================
+     CENTER DIVIDER
+  ========================= */
 
   ctx.save();
 
 
   ctx.strokeStyle =
-    "rgba(255,255,255,.08)";
+    "rgba(255,255,255,.28)";
 
   ctx.lineWidth = 2;
 
 
+  ctx.setLineDash([
+    12,
+    10
+  ]);
+
+
   ctx.beginPath();
 
+  ctx.moveTo(
+    28,
+    middle
+  );
 
-  ctx.arc(
+  ctx.lineTo(
+    W - 28,
+    middle
+  );
 
+  ctx.stroke();
+
+
+  ctx.setLineDash([]);
+
+
+  /*
+     Center glow
+  */
+
+  ctx.strokeStyle =
+    "rgba(255,255,255,.07)";
+
+  ctx.lineWidth = 10;
+
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    28,
+    middle
+  );
+
+  ctx.lineTo(
+    W - 28,
+    middle
+  );
+
+  ctx.stroke();
+
+
+  ctx.restore();
+
+
+  /* =========================
+     SIDE LABELS
+  ========================= */
+
+  ctx.save();
+
+  ctx.textAlign =
+    "center";
+
+  ctx.font =
+    "bold 10px Arial";
+
+  ctx.letterSpacing =
+    "3px";
+
+
+  ctx.fillStyle =
+    "rgba(255,83,109,.45)";
+
+
+  ctx.fillText(
+    "RED SIDE",
     W / 2,
-
-    (
-      arenaTop +
-      arenaBottom
-    ) / 2,
-
-    Math.min(
-      W,
-      H
-    ) * .22,
-
-    0,
-
-    Math.PI * 2
-
+    top + 25
   );
 
 
-  ctx.stroke();
+  ctx.fillStyle =
+    "rgba(93,231,255,.45)";
+
+
+  ctx.fillText(
+    "BLUE SIDE",
+    W / 2,
+    bottom - 18
+  );
 
 
   ctx.restore();
@@ -1897,20 +2096,22 @@ function drawDisc(
   );
 
 
+  const color =
+    enemyDisc
+      ? getEnemyColor()
+      : "#5de7ff";
+
+
   ctx.shadowBlur =
     18;
 
 
   ctx.shadowColor =
-    enemyDisc
-      ? getEnemyColor()
-      : "rgba(50,210,255,.9)";
+    color;
 
 
   ctx.strokeStyle =
-    enemyDisc
-      ? getEnemyColor()
-      : "#5de7ff";
+    color;
 
 
   ctx.lineWidth = 4;
@@ -1984,9 +2185,7 @@ function drawPlayer() {
   ctx.lineWidth = 3;
 
 
-  /*
-     TALL VERTICAL OVAL
-  */
+  /* BLUE OVAL */
 
   ctx.beginPath();
 
@@ -2022,7 +2221,10 @@ function drawPlayer() {
   ctx.fill();
 
 
-  /* Direction marker */
+  /*
+     Direction marker points
+     upward toward enemy.
+  */
 
   ctx.fillStyle =
     "#5de7ff";
@@ -2032,20 +2234,20 @@ function drawPlayer() {
 
 
   ctx.moveTo(
-    14,
-    0
+    0,
+    -20
   );
 
 
   ctx.lineTo(
-    6,
-    -4
+    -4,
+    -9
   );
 
 
   ctx.lineTo(
-    6,
-    4
+    4,
+    -9
   );
 
 
@@ -2055,7 +2257,7 @@ function drawPlayer() {
   ctx.fill();
 
 
-  /* Block ring */
+  /* BLOCK RING */
 
   if (blocking) {
 
@@ -2126,9 +2328,7 @@ function drawEnemy() {
   ctx.lineWidth = 3;
 
 
-  /*
-     TALL VERTICAL OVAL
-  */
+  /* RED OVAL */
 
   ctx.beginPath();
 
@@ -2164,10 +2364,48 @@ function drawEnemy() {
   ctx.fill();
 
 
+  /*
+     Enemy points downward
+     toward the blue player.
+  */
+
+  ctx.fillStyle =
+    enemyColor;
+
+
+  ctx.beginPath();
+
+
+  ctx.moveTo(
+    0,
+    20
+  );
+
+
+  ctx.lineTo(
+    -4,
+    9
+  );
+
+
+  ctx.lineTo(
+    4,
+    9
+  );
+
+
+  ctx.closePath();
+
+
+  ctx.fill();
+
+
   ctx.restore();
 
 
-  /* Enemy health */
+  /* =========================
+     ENEMY HEALTH
+  ========================= */
 
   const width = 70;
 
@@ -2291,9 +2529,9 @@ function draw() {
   drawParticles();
 
 
-  drawPlayer();
-
   drawEnemy();
+
+  drawPlayer();
 
 }
 
