@@ -2,18 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+
 <meta name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+      content="width=device-width, initial-scale=1, maximum-scale=1,
+      user-scalable=no, viewport-fit=cover">
+
 <title>DISC//ARENA</title>
 
 <style>
+
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   width: 100%;
   height: 100%;
@@ -36,8 +41,14 @@ body {
   height: 100%;
   max-width: 600px;
   overflow: hidden;
+
   background:
-    radial-gradient(circle at center, #101923 0%, #050a10 45%, #020408 100%);
+    radial-gradient(
+      circle at center,
+      #101923 0%,
+      #050a10 45%,
+      #020408 100%
+    );
 }
 
 canvas {
@@ -47,25 +58,37 @@ canvas {
   height: 100%;
 }
 
-/* HUD */
+/* =========================
+   HUD
+========================= */
 
 #hud {
   position: absolute;
+
   top: max(16px, env(safe-area-inset-top));
   left: 0;
+
   width: 100%;
+
   padding: 12px 16px;
+
   display: flex;
   justify-content: space-between;
+
   pointer-events: none;
+
   z-index: 5;
 }
 
 .hudBox {
   background: rgba(0,0,0,.45);
+
   border: 1px solid rgba(255,255,255,.16);
+
   padding: 7px 11px;
+
   border-radius: 9px;
+
   backdrop-filter: blur(5px);
 }
 
@@ -80,86 +103,127 @@ canvas {
   font-weight: bold;
 }
 
-/* Touch controls */
+/* =========================
+   TOUCH CONTROLS
+========================= */
 
 #controls {
   position: absolute;
+
   bottom: max(18px, env(safe-area-inset-bottom));
   left: 0;
+
   width: 100%;
+
   padding: 12px 16px;
+
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+
   z-index: 10;
 }
 
 #joystick {
   width: 132px;
   height: 132px;
+
   border-radius: 50%;
+
   background: rgba(255,255,255,.055);
+
   border: 1px solid rgba(255,255,255,.16);
+
   position: relative;
+
   touch-action: none;
 }
 
 #stick {
   position: absolute;
+
   width: 58px;
   height: 58px;
+
   left: 37px;
   top: 37px;
+
   border-radius: 50%;
+
   background: rgba(255,255,255,.12);
+
   border: 1px solid rgba(255,255,255,.3);
 }
 
 #buttons {
   display: grid;
+
   grid-template-columns: repeat(2, 76px);
+
   gap: 10px;
 }
 
 .action {
   width: 76px;
   height: 58px;
+
   border-radius: 15px;
+
   border: 1px solid rgba(255,255,255,.22);
+
   background: rgba(255,255,255,.07);
+
   color: white;
+
   font-weight: bold;
   font-size: 11px;
   letter-spacing: 1px;
+
   touch-action: manipulation;
 }
 
 .action:active {
   transform: scale(.94);
+
   background: rgba(255,255,255,.18);
 }
 
 #throwBtn {
   grid-column: span 2;
+
   width: 162px;
+
   background: rgba(0,180,255,.12);
+
   border-color: rgba(0,200,255,.55);
 }
 
-/* Start screen */
+/* =========================
+   START / GAME OVER
+========================= */
 
 #startScreen,
 #gameOver {
   position: absolute;
+
   inset: 0;
+
   z-index: 20;
+
   display: flex;
+
   flex-direction: column;
+
   justify-content: center;
+
   align-items: center;
+
   text-align: center;
+
   padding: 30px;
+
   background: rgba(1,4,8,.82);
+
   backdrop-filter: blur(8px);
 }
 
@@ -169,9 +233,13 @@ canvas {
 
 .title {
   font-size: clamp(38px, 12vw, 72px);
+
   font-weight: 900;
+
   letter-spacing: 7px;
+
   margin: 0;
+
   text-shadow:
     0 0 10px rgba(0,200,255,.8),
     0 0 35px rgba(0,120,255,.35);
@@ -179,35 +247,54 @@ canvas {
 
 .subtitle {
   margin-top: 10px;
+
   font-size: 11px;
+
   letter-spacing: 4px;
+
   opacity: .55;
 }
 
 .startButton {
   margin-top: 35px;
+
   min-width: 190px;
+
   padding: 16px 25px;
+
   border-radius: 12px;
+
   border: 1px solid rgba(0,210,255,.7);
+
   background: rgba(0,160,255,.12);
+
   color: white;
+
   font-size: 14px;
+
   font-weight: bold;
+
   letter-spacing: 3px;
 }
 
 .instructions {
   margin-top: 24px;
+
   max-width: 310px;
+
   font-size: 12px;
+
   line-height: 1.7;
+
   opacity: .6;
 }
 
-/* Landscape adjustment */
+/* =========================
+   LANDSCAPE
+========================= */
 
 @media (orientation: landscape) and (max-height: 500px) {
+
   #controls {
     padding-bottom: 8px;
   }
@@ -220,6 +307,7 @@ canvas {
   #stick {
     width: 48px;
     height: 48px;
+
     left: 28px;
     top: 28px;
   }
@@ -227,7 +315,9 @@ canvas {
   .action {
     height: 48px;
   }
+
 }
+
 </style>
 </head>
 
@@ -237,171 +327,414 @@ canvas {
 
   <canvas id="canvas"></canvas>
 
+  <!-- HUD -->
+
   <div id="hud">
+
     <div class="hudBox">
-      <div class="label">ROUND</div>
-      <div class="value" id="round">1</div>
+
+      <div class="label">
+        ROUND
+      </div>
+
+      <div class="value" id="round">
+        1
+      </div>
+
     </div>
 
     <div class="hudBox">
-      <div class="label">SCORE</div>
-      <div class="value" id="score">0</div>
+
+      <div class="label">
+        SCORE
+      </div>
+
+      <div class="value" id="score">
+        0
+      </div>
+
     </div>
 
     <div class="hudBox">
-      <div class="label">ENERGY</div>
-      <div class="value" id="energy">100</div>
+
+      <div class="label">
+        ENERGY
+      </div>
+
+      <div class="value" id="energy">
+        100
+      </div>
+
     </div>
+
   </div>
+
+
+  <!-- CONTROLS -->
 
   <div id="controls">
 
     <div id="joystick">
+
       <div id="stick"></div>
+
     </div>
 
     <div id="buttons">
-      <button class="action" id="blockBtn">BLOCK</button>
-      <button class="action" id="dashBtn">DASH</button>
-      <button class="action" id="throwBtn">THROW DISC</button>
+
+      <button
+        class="action"
+        id="blockBtn">
+        BLOCK
+      </button>
+
+      <button
+        class="action"
+        id="dashBtn">
+        DASH
+      </button>
+
+      <button
+        class="action"
+        id="throwBtn">
+        THROW DISC
+      </button>
+
     </div>
 
   </div>
 
-  <div id="startScreen">
-    <h1 class="title">DISC//ARENA</h1>
-    <div class="subtitle">DIGITAL COMBAT PROTOTYPE</div>
 
-    <button class="startButton" id="startBtn">
+  <!-- START SCREEN -->
+
+  <div id="startScreen">
+
+    <h1 class="title">
+      DISC//ARENA
+    </h1>
+
+    <div class="subtitle">
+      DIGITAL COMBAT PROTOTYPE
+    </div>
+
+    <button
+      class="startButton"
+      id="startBtn">
       ENTER ARENA
     </button>
 
     <div class="instructions">
+
       Move with the joystick.<br>
+
       Throw your disc at the enemy.<br>
+
       Block incoming attacks.<br>
+
       Dash to escape danger.
+
     </div>
+
   </div>
 
-  <div id="gameOver">
-    <h1 class="title">ELIMINATED</h1>
 
-    <div class="subtitle" id="finalScore">
+  <!-- GAME OVER -->
+
+  <div id="gameOver">
+
+    <h1 class="title">
+      ELIMINATED
+    </h1>
+
+    <div
+      class="subtitle"
+      id="finalScore">
       SCORE 0
     </div>
 
-    <button class="startButton" id="restartBtn">
+    <button
+      class="startButton"
+      id="restartBtn">
       REMATCH
     </button>
+
   </div>
 
 </div>
 
+
 <script>
 
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+/* =========================
+   CANVAS
+========================= */
 
-const game = document.getElementById("game");
+const canvas =
+  document.getElementById("canvas");
 
-const roundText = document.getElementById("round");
-const scoreText = document.getElementById("score");
-const energyText = document.getElementById("energy");
+const ctx =
+  canvas.getContext("2d");
 
-const startScreen = document.getElementById("startScreen");
-const gameOver = document.getElementById("gameOver");
-const finalScore = document.getElementById("finalScore");
+const game =
+  document.getElementById("game");
 
-const joystick = document.getElementById("joystick");
-const stick = document.getElementById("stick");
 
-const blockBtn = document.getElementById("blockBtn");
-const dashBtn = document.getElementById("dashBtn");
-const throwBtn = document.getElementById("throwBtn");
+const roundText =
+  document.getElementById("round");
+
+const scoreText =
+  document.getElementById("score");
+
+const energyText =
+  document.getElementById("energy");
+
+
+const startScreen =
+  document.getElementById("startScreen");
+
+const gameOver =
+  document.getElementById("gameOver");
+
+const finalScore =
+  document.getElementById("finalScore");
+
+
+const joystick =
+  document.getElementById("joystick");
+
+const stick =
+  document.getElementById("stick");
+
+
+const blockBtn =
+  document.getElementById("blockBtn");
+
+const dashBtn =
+  document.getElementById("dashBtn");
+
+const throwBtn =
+  document.getElementById("throwBtn");
+
 
 let W = 0;
 let H = 0;
 
+
 function resize() {
-  const rect = game.getBoundingClientRect();
+
+  const rect =
+    game.getBoundingClientRect();
 
   W = rect.width;
   H = rect.height;
 
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const dpr =
+    Math.min(
+      window.devicePixelRatio || 1,
+      2
+    );
 
-  canvas.width = W * dpr;
-  canvas.height = H * dpr;
+  canvas.width =
+    W * dpr;
 
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  canvas.height =
+    H * dpr;
+
+  ctx.setTransform(
+    dpr,
+    0,
+    0,
+    dpr,
+    0,
+    0
+  );
 }
 
-window.addEventListener("resize", resize);
+
+window.addEventListener(
+  "resize",
+  resize
+);
+
 resize();
+
 
 /* =========================
    GAME STATE
 ========================= */
 
 let running = false;
+
 let lastTime = 0;
 
 let score = 0;
+
 let round = 1;
 
 let energy = 100;
 
+
+/*
+   NEW:
+   Tracks how long the current
+   game has been running.
+*/
+
+let gameTime = 0;
+
+
 let particles = [];
+
 let projectiles = [];
 
+
 let joystickX = 0;
+
 let joystickY = 0;
+
 
 let blocking = false;
 
+
 let player;
+
 let enemy;
+
 
 /* =========================
    UTILITIES
 ========================= */
 
-function clamp(v, min, max) {
-  return Math.max(min, Math.min(max, v));
+function clamp(
+  v,
+  min,
+  max
+) {
+
+  return Math.max(
+    min,
+    Math.min(max, v)
+  );
+
 }
+
 
 function distance(a, b) {
-  return Math.hypot(a.x - b.x, a.y - b.y);
+
+  return Math.hypot(
+    a.x - b.x,
+    a.y - b.y
+  );
+
 }
+
 
 function angleTo(a, b) {
-  return Math.atan2(b.y - a.y, b.x - a.x);
+
+  return Math.atan2(
+    b.y - a.y,
+    b.x - a.x
+  );
+
 }
 
-function spawnParticle(x, y, amount = 8) {
 
-  for (let i = 0; i < amount; i++) {
+function spawnParticle(
+  x,
+  y,
+  amount = 8
+) {
 
-    const angle = Math.random() * Math.PI * 2;
-    const speed = 40 + Math.random() * 180;
+  for (
+    let i = 0;
+    i < amount;
+    i++
+  ) {
+
+    const angle =
+      Math.random() *
+      Math.PI *
+      2;
+
+    const speed =
+      40 +
+      Math.random() *
+      180;
 
     particles.push({
+
       x,
       y,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed,
-      life: .4 + Math.random() * .5,
-      maxLife: .4 + Math.random() * .5
+
+      vx:
+        Math.cos(angle) *
+        speed,
+
+      vy:
+        Math.sin(angle) *
+        speed,
+
+      life:
+        .4 +
+        Math.random() *
+        .5,
+
+      maxLife:
+        .4 +
+        Math.random() *
+        .5
+
     });
+
   }
+
 }
+
+
+/* =========================
+   ENEMY COLOR
+========================= */
+
+/*
+   0 - 60 seconds:
+   RED
+
+   60 - 65 seconds:
+   YELLOW
+
+   65+ seconds:
+   ORANGE
+*/
+
+function getEnemyColor() {
+
+  if (gameTime < 60) {
+
+    return "#ff536d";
+
+  }
+
+  if (gameTime < 65) {
+
+    return "#ffe34d";
+
+  }
+
+  return "#ff8a3d";
+
+}
+
 
 /* =========================
    DISC
 ========================= */
 
-function createDisc(owner, x, y, angle) {
+function createDisc(
+  owner,
+  x,
+  y,
+  angle
+) {
 
   projectiles.push({
 
@@ -410,8 +743,13 @@ function createDisc(owner, x, y, angle) {
     x,
     y,
 
-    vx: Math.cos(angle) * 430,
-    vy: Math.sin(angle) * 430,
+    vx:
+      Math.cos(angle) *
+      430,
+
+    vy:
+      Math.sin(angle) *
+      430,
 
     radius: 11,
 
@@ -420,8 +758,28 @@ function createDisc(owner, x, y, angle) {
     angle,
 
     spin: 0
+
   });
+
 }
+
+
+/*
+   Checks whether a character
+   already has a disc flying.
+
+   This guarantees only ONE
+   disc can exist per character.
+*/
+
+function hasActiveDisc(owner) {
+
+  return projectiles.some(
+    p => p.owner === owner
+  );
+
+}
+
 
 /* =========================
    RESET
@@ -430,34 +788,54 @@ function createDisc(owner, x, y, angle) {
 function resetGame() {
 
   score = 0;
+
   round = 1;
+
   energy = 100;
 
+  gameTime = 0;
+
   particles = [];
+
   projectiles = [];
+
 
   player = {
 
-    x: W * .28,
-    y: H * .5,
+    x:
+      W * .28,
 
-    radius: 19,
+    y:
+      H * .5,
+
+    /*
+       Smaller character.
+    */
+
+    radius: 14,
 
     speed: 185,
-
-    cooldown: 0,
 
     dashCooldown: 0,
 
     invincible: 0
+
   };
+
 
   enemy = {
 
-    x: W * .72,
-    y: H * .5,
+    x:
+      W * .72,
 
-    radius: 19,
+    y:
+      H * .5,
+
+    /*
+       Smaller character.
+    */
+
+    radius: 14,
 
     speed: 100,
 
@@ -468,10 +846,14 @@ function resetGame() {
     maxHealth: 3,
 
     hitFlash: 0
+
   };
 
+
   updateHUD();
+
 }
+
 
 /* =========================
    PLAYER ACTIONS
@@ -479,58 +861,159 @@ function resetGame() {
 
 function throwDisc() {
 
-  if (!running) return;
+  if (!running)
+    return;
 
-  if (player.cooldown > 0) return;
 
-  const angle = angleTo(player, enemy);
+  /*
+     NEW:
+     Player cannot throw another
+     disc while one is already
+     flying.
+  */
+
+  if (
+    hasActiveDisc("player")
+  ) {
+
+    return;
+
+  }
+
+
+  const angle =
+    angleTo(
+      player,
+      enemy
+    );
+
 
   createDisc(
+
     "player",
-    player.x + Math.cos(angle) * 25,
-    player.y + Math.sin(angle) * 25,
+
+    player.x +
+      Math.cos(angle) * 20,
+
+    player.y +
+      Math.sin(angle) * 20,
+
     angle
+
   );
 
-  player.cooldown = .55;
 
   spawnParticle(
-    player.x + Math.cos(angle) * 25,
-    player.y + Math.sin(angle) * 25,
+
+    player.x +
+      Math.cos(angle) * 20,
+
+    player.y +
+      Math.sin(angle) * 20,
+
     5
+
   );
+
 }
+
+
+/* =========================
+   DASH
+========================= */
 
 function dash() {
 
-  if (!running) return;
+  if (!running)
+    return;
 
-  if (player.dashCooldown > 0) return;
 
-  let dx = joystickX;
-  let dy = joystickY;
+  if (
+    player.dashCooldown > 0
+  ) {
 
-  if (Math.abs(dx) + Math.abs(dy) < .1) {
+    return;
 
-    const a = angleTo(player, enemy);
-
-    dx = Math.cos(a) * -1;
-    dy = Math.sin(a) * -1;
   }
 
-  const length = Math.hypot(dx, dy) || 1;
 
-  player.x += (dx / length) * 95;
-  player.y += (dy / length) * 95;
+  let dx =
+    joystickX;
 
-  player.x = clamp(player.x, 45, W - 45);
-  player.y = clamp(player.y, 90, H - 130);
+  let dy =
+    joystickY;
 
-  player.invincible = .35;
-  player.dashCooldown = 1;
 
-  spawnParticle(player.x, player.y, 18);
+  if (
+    Math.abs(dx) +
+    Math.abs(dy) <
+    .1
+  ) {
+
+    const a =
+      angleTo(
+        player,
+        enemy
+      );
+
+    dx =
+      Math.cos(a) * -1;
+
+    dy =
+      Math.sin(a) * -1;
+
+  }
+
+
+  const length =
+    Math.hypot(
+      dx,
+      dy
+    ) || 1;
+
+
+  player.x +=
+    (dx / length) *
+    95;
+
+
+  player.y +=
+    (dy / length) *
+    95;
+
+
+  player.x =
+    clamp(
+      player.x,
+      40,
+      W - 40
+    );
+
+
+  player.y =
+    clamp(
+      player.y,
+      85,
+      H - 130
+    );
+
+
+  player.invincible =
+    .35;
+
+
+  player.dashCooldown =
+    1;
+
+
+  spawnParticle(
+    player.x,
+    player.y,
+    18
+  );
+
 }
+
 
 /* =========================
    ENEMY
@@ -538,41 +1021,116 @@ function dash() {
 
 function enemyAttack() {
 
-  const angle = angleTo(enemy, player);
+  /*
+     NEW:
+     Enemy can only have ONE
+     disc flying at a time.
+  */
+
+  if (
+    hasActiveDisc("enemy")
+  ) {
+
+    return;
+
+  }
+
+
+  const angle =
+    angleTo(
+      enemy,
+      player
+    );
+
 
   createDisc(
+
     "enemy",
-    enemy.x + Math.cos(angle) * 25,
-    enemy.y + Math.sin(angle) * 25,
+
+    enemy.x +
+      Math.cos(angle) * 20,
+
+    enemy.y +
+      Math.sin(angle) * 20,
+
     angle
+
   );
 
+
   enemy.cooldown =
-    Math.max(.65, 1.5 - round * .08);
+    Math.max(
+      .65,
+      1.5 -
+      round * .08
+    );
+
 }
+
+
+/* =========================
+   DEFEAT ENEMY
+========================= */
 
 function defeatEnemy() {
 
-  score += 100 * round;
+  score +=
+    100 * round;
 
-  spawnParticle(enemy.x, enemy.y, 40);
+
+  spawnParticle(
+    enemy.x,
+    enemy.y,
+    40
+  );
+
 
   round++;
 
+
   enemy.health =
-    Math.min(8, 2 + Math.floor(round / 2));
+    Math.min(
+      8,
+      2 +
+      Math.floor(
+        round / 2
+      )
+    );
 
-  enemy.maxHealth = enemy.health;
 
-  enemy.x = W * .72;
-  enemy.y = H * (.35 + Math.random() * .3);
+  enemy.maxHealth =
+    enemy.health;
 
-  enemy.speed = 95 + round * 8;
 
-  energy = Math.min(100, energy + 15);
+  enemy.x =
+    W * .72;
+
+
+  enemy.y =
+    H *
+    (
+      .35 +
+      Math.random() *
+      .3
+    );
+
+
+  enemy.speed =
+    95 +
+    round * 8;
+
+
+  energy =
+    Math.min(
+      100,
+      energy + 15
+    );
+
 
   updateHUD();
+
 }
+
 
 /* =========================
    UPDATE
@@ -580,226 +1138,535 @@ function defeatEnemy() {
 
 function update(dt) {
 
-  if (!running) return;
+  if (!running)
+    return;
 
-  player.cooldown =
-    Math.max(0, player.cooldown - dt);
+
+  /*
+     NEW:
+     Game timer.
+
+     This is independent of
+     rounds and continues through
+     the entire match.
+  */
+
+  gameTime += dt;
+
 
   player.dashCooldown =
-    Math.max(0, player.dashCooldown - dt);
+    Math.max(
+      0,
+      player.dashCooldown - dt
+    );
+
 
   player.invincible =
-    Math.max(0, player.invincible - dt);
+    Math.max(
+      0,
+      player.invincible - dt
+    );
+
 
   enemy.cooldown =
-    Math.max(0, enemy.cooldown - dt);
+    Math.max(
+      0,
+      enemy.cooldown - dt
+    );
+
 
   enemy.hitFlash =
-    Math.max(0, enemy.hitFlash - dt);
+    Math.max(
+      0,
+      enemy.hitFlash - dt
+    );
 
-  /* Player movement */
+
+  /* =========================
+     PLAYER MOVEMENT
+  ========================= */
 
   const joystickMagnitude =
-    Math.hypot(joystickX, joystickY);
+    Math.hypot(
+      joystickX,
+      joystickY
+    );
 
-  if (joystickMagnitude > .05) {
 
-    player.x += joystickX * player.speed * dt;
-    player.y += joystickY * player.speed * dt;
+  if (
+    joystickMagnitude > .05
+  ) {
+
+    player.x +=
+      joystickX *
+      player.speed *
+      dt;
+
+    player.y +=
+      joystickY *
+      player.speed *
+      dt;
+
   }
 
+
   player.x =
-    clamp(player.x, 40, W - 40);
+    clamp(
+      player.x,
+      40,
+      W - 40
+    );
+
 
   player.y =
-    clamp(player.y, 85, H - 130);
+    clamp(
+      player.y,
+      85,
+      H - 130
+    );
 
-  /* Enemy AI */
 
-  const dist = distance(player, enemy);
+  /* =========================
+     ENEMY AI
+  ========================= */
+
+  const dist =
+    distance(
+      player,
+      enemy
+    );
+
 
   if (dist > 180) {
 
-    const a = angleTo(enemy, player);
+    const a =
+      angleTo(
+        enemy,
+        player
+      );
 
-    enemy.x += Math.cos(a) * enemy.speed * dt;
-    enemy.y += Math.sin(a) * enemy.speed * dt;
 
-  } else {
+    enemy.x +=
+      Math.cos(a) *
+      enemy.speed *
+      dt;
 
-    /* Circle around player */
+
+    enemy.y +=
+      Math.sin(a) *
+      enemy.speed *
+      dt;
+
+  }
+  else {
 
     const a =
-      angleTo(enemy, player) +
+      angleTo(
+        enemy,
+        player
+      ) +
       Math.PI / 2;
 
-    enemy.x += Math.cos(a) * enemy.speed * .55 * dt;
-    enemy.y += Math.sin(a) * enemy.speed * .55 * dt;
+
+    enemy.x +=
+      Math.cos(a) *
+      enemy.speed *
+      .55 *
+      dt;
+
+
+    enemy.y +=
+      Math.sin(a) *
+      enemy.speed *
+      .55 *
+      dt;
+
   }
 
-  enemy.x = clamp(enemy.x, 40, W - 40);
-  enemy.y = clamp(enemy.y, 85, H - 130);
+
+  enemy.x =
+    clamp(
+      enemy.x,
+      40,
+      W - 40
+    );
+
+
+  enemy.y =
+    clamp(
+      enemy.y,
+      85,
+      H - 130
+    );
+
+
+  /*
+     Enemy only attacks when
+     it doesn't already have a
+     disc flying.
+  */
 
   if (
     enemy.cooldown <= 0 &&
-    dist < 520
+    dist < 520 &&
+    !hasActiveDisc("enemy")
   ) {
+
     enemyAttack();
+
   }
 
-  /* Projectiles */
 
-  for (let i = projectiles.length - 1; i >= 0; i--) {
+  /* =========================
+     PROJECTILES
+  ========================= */
 
-    const p = projectiles[i];
+  for (
+    let i =
+      projectiles.length - 1;
 
-    p.x += p.vx * dt;
-    p.y += p.vy * dt;
+    i >= 0;
+
+    i--
+  ) {
+
+    const p =
+      projectiles[i];
+
+
+    p.x +=
+      p.vx *
+      dt;
+
+
+    p.y +=
+      p.vy *
+      dt;
+
 
     p.life -= dt;
 
-    p.angle += 12 * dt;
 
-    /* Arena walls */
+    p.angle +=
+      12 *
+      dt;
 
-    if (p.x < 30 || p.x > W - 30) {
+
+    /* =========================
+       ARENA WALLS
+    ========================= */
+
+    if (
+      p.x < 30 ||
+      p.x > W - 30
+    ) {
+
       p.vx *= -1;
-      p.x = clamp(p.x, 30, W - 30);
+
+      p.x =
+        clamp(
+          p.x,
+          30,
+          W - 30
+        );
+
     }
 
-    if (p.y < 70 || p.y > H - 115) {
+
+    if (
+      p.y < 70 ||
+      p.y > H - 115
+    ) {
+
       p.vy *= -1;
-      p.y = clamp(p.y, 70, H - 115);
+
+      p.y =
+        clamp(
+          p.y,
+          70,
+          H - 115
+        );
+
     }
 
-    /* Player projectile hits enemy */
+
+    /* =========================
+       PLAYER DISC HITS ENEMY
+    ========================= */
 
     if (
       p.owner === "player" &&
-      distance(p, enemy) <
-      p.radius + enemy.radius
+      distance(
+        p,
+        enemy
+      ) <
+      p.radius +
+      enemy.radius
     ) {
 
       enemy.health--;
-      enemy.hitFlash = .15;
 
-      spawnParticle(p.x, p.y, 14);
+      enemy.hitFlash =
+        .15;
 
-      projectiles.splice(i, 1);
 
-      if (enemy.health <= 0) {
+      spawnParticle(
+        p.x,
+        p.y,
+        14
+      );
+
+
+      /*
+         Disc is destroyed,
+         allowing player to throw
+         again.
+      */
+
+      projectiles.splice(
+        i,
+        1
+      );
+
+
+      if (
+        enemy.health <= 0
+      ) {
+
         defeatEnemy();
+
       }
 
+
       continue;
+
     }
 
-    /* Enemy projectile hits player */
+
+    /* =========================
+       ENEMY DISC HITS PLAYER
+    ========================= */
 
     if (
       p.owner === "enemy" &&
-      distance(p, player) <
-      p.radius + player.radius
+      distance(
+        p,
+        player
+      ) <
+      p.radius +
+      player.radius
     ) {
 
       if (blocking) {
 
-        /* Successful block */
-
         score += 25;
 
-        spawnParticle(p.x, p.y, 12);
 
-        projectiles.splice(i, 1);
+        spawnParticle(
+          p.x,
+          p.y,
+          12
+        );
+
+
+        projectiles.splice(
+          i,
+          1
+        );
+
 
         updateHUD();
 
         continue;
+
       }
 
-      if (player.invincible <= 0) {
+
+      if (
+        player.invincible <= 0
+      ) {
 
         energy -= 25;
 
-        spawnParticle(player.x, player.y, 18);
 
-        projectiles.splice(i, 1);
+        spawnParticle(
+          player.x,
+          player.y,
+          18
+        );
 
-        if (energy <= 0) {
+
+        projectiles.splice(
+          i,
+          1
+        );
+
+
+        if (
+          energy <= 0
+        ) {
 
           energy = 0;
 
           endGame();
+
         }
+
 
         updateHUD();
 
         continue;
+
       }
+
     }
 
-    if (p.life <= 0) {
-      projectiles.splice(i, 1);
+
+    /*
+       Disc expired.
+
+       This also frees the character
+       to throw another disc.
+    */
+
+    if (
+      p.life <= 0
+    ) {
+
+      projectiles.splice(
+        i,
+        1
+      );
+
     }
+
   }
 
-  /* Particles */
 
-  for (let i = particles.length - 1; i >= 0; i--) {
+  /* =========================
+     PARTICLES
+  ========================= */
 
-    const p = particles[i];
+  for (
+    let i =
+      particles.length - 1;
 
-    p.x += p.vx * dt;
-    p.y += p.vy * dt;
+    i >= 0;
+
+    i--
+  ) {
+
+    const p =
+      particles[i];
+
+
+    p.x +=
+      p.vx *
+      dt;
+
+
+    p.y +=
+      p.vy *
+      dt;
+
 
     p.vx *= .94;
+
     p.vy *= .94;
+
 
     p.life -= dt;
 
-    if (p.life <= 0) {
-      particles.splice(i, 1);
+
+    if (
+      p.life <= 0
+    ) {
+
+      particles.splice(
+        i,
+        1
+      );
+
     }
+
   }
 
+
   updateHUD();
+
 }
 
+
 /* =========================
-   DRAW
+   DRAW ARENA
 ========================= */
 
 function drawArena() {
 
-  ctx.clearRect(0, 0, W, H);
+  ctx.clearRect(
+    0,
+    0,
+    W,
+    H
+  );
 
-  /* Background */
 
   const gradient =
     ctx.createRadialGradient(
+
       W / 2,
       H / 2,
       30,
+
       W / 2,
       H / 2,
-      Math.max(W, H) * .7
+
+      Math.max(W, H) *
+      .7
+
     );
 
-  gradient.addColorStop(0, "#111b26");
-  gradient.addColorStop(1, "#02060a");
 
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, W, H);
+  gradient.addColorStop(
+    0,
+    "#111b26"
+  );
 
-  /* Arena */
+
+  gradient.addColorStop(
+    1,
+    "#02060a"
+  );
+
+
+  ctx.fillStyle =
+    gradient;
+
+
+  ctx.fillRect(
+    0,
+    0,
+    W,
+    H
+  );
+
 
   const arenaTop = 70;
-  const arenaBottom = H - 105;
+
+  const arenaBottom =
+    H - 105;
+
+
+  /* Grid */
 
   ctx.save();
 
-  ctx.strokeStyle = "rgba(80,180,220,.18)";
+
+  ctx.strokeStyle =
+    "rgba(80,180,220,.18)";
+
   ctx.lineWidth = 1;
+
 
   for (
     let x = 20;
@@ -808,10 +1675,21 @@ function drawArena() {
   ) {
 
     ctx.beginPath();
-    ctx.moveTo(x, arenaTop);
-    ctx.lineTo(x, arenaBottom);
+
+    ctx.moveTo(
+      x,
+      arenaTop
+    );
+
+    ctx.lineTo(
+      x,
+      arenaBottom
+    );
+
     ctx.stroke();
+
   }
+
 
   for (
     let y = arenaTop;
@@ -820,81 +1698,152 @@ function drawArena() {
   ) {
 
     ctx.beginPath();
-    ctx.moveTo(20, y);
-    ctx.lineTo(W - 20, y);
+
+    ctx.moveTo(
+      20,
+      y
+    );
+
+    ctx.lineTo(
+      W - 20,
+      y
+    );
+
     ctx.stroke();
+
   }
+
 
   ctx.restore();
 
-  /* Arena boundary */
+
+  /* Boundary */
 
   ctx.save();
 
-  ctx.strokeStyle = "rgba(0,190,255,.55)";
+
+  ctx.strokeStyle =
+    "rgba(0,190,255,.55)";
+
   ctx.lineWidth = 2;
 
+
   ctx.strokeRect(
     25,
     arenaTop,
     W - 50,
-    arenaBottom - arenaTop
+    arenaBottom -
+      arenaTop
   );
 
-  ctx.strokeStyle = "rgba(0,190,255,.1)";
+
+  ctx.strokeStyle =
+    "rgba(0,190,255,.1)";
+
   ctx.lineWidth = 12;
 
+
   ctx.strokeRect(
     25,
     arenaTop,
     W - 50,
-    arenaBottom - arenaTop
+    arenaBottom -
+      arenaTop
   );
 
+
   ctx.restore();
+
 
   /* Center circle */
 
   ctx.save();
 
-  ctx.strokeStyle = "rgba(255,255,255,.08)";
+
+  ctx.strokeStyle =
+    "rgba(255,255,255,.08)";
+
   ctx.lineWidth = 2;
 
+
   ctx.beginPath();
+
+
   ctx.arc(
+
     W / 2,
-    (arenaTop + arenaBottom) / 2,
-    Math.min(W, H) * .22,
+
+    (
+      arenaTop +
+      arenaBottom
+    ) / 2,
+
+    Math.min(
+      W,
+      H
+    ) * .22,
+
     0,
+
     Math.PI * 2
+
   );
+
 
   ctx.stroke();
 
+
   ctx.restore();
+
 }
 
-function drawDisc(x, y, angle, enemyDisc = false) {
+
+/* =========================
+   DRAW DISC
+========================= */
+
+function drawDisc(
+  x,
+  y,
+  angle,
+  enemyDisc = false
+) {
 
   ctx.save();
 
-  ctx.translate(x, y);
-  ctx.rotate(angle);
 
-  ctx.shadowBlur = 18;
+  ctx.translate(
+    x,
+    y
+  );
+
+
+  ctx.rotate(
+    angle
+  );
+
+
+  ctx.shadowBlur =
+    18;
+
+
   ctx.shadowColor =
     enemyDisc
-      ? "rgba(255,70,100,.8)"
+      ? getEnemyColor()
       : "rgba(50,210,255,.9)";
+
 
   ctx.strokeStyle =
     enemyDisc
-      ? "#ff536d"
+      ? getEnemyColor()
       : "#5de7ff";
+
 
   ctx.lineWidth = 4;
 
+
   ctx.beginPath();
+
 
   ctx.arc(
     0,
@@ -904,31 +1853,65 @@ function drawDisc(x, y, angle, enemyDisc = false) {
     Math.PI * 2
   );
 
+
   ctx.stroke();
+
 
   ctx.beginPath();
 
-  ctx.moveTo(-7, 0);
-  ctx.lineTo(7, 0);
+
+  ctx.moveTo(
+    -7,
+    0
+  );
+
+
+  ctx.lineTo(
+    7,
+    0
+  );
+
 
   ctx.stroke();
 
+
   ctx.restore();
+
 }
+
+
+/* =========================
+   DRAW PLAYER
+========================= */
 
 function drawPlayer() {
 
   ctx.save();
 
-  ctx.translate(player.x, player.y);
 
-  ctx.shadowBlur = 20;
-  ctx.shadowColor = "#35d9ff";
+  ctx.translate(
+    player.x,
+    player.y
+  );
 
-  ctx.strokeStyle = "#5de7ff";
+
+  ctx.shadowBlur =
+    20;
+
+
+  ctx.shadowColor =
+    "#35d9ff";
+
+
+  ctx.strokeStyle =
+    "#5de7ff";
+
+
   ctx.lineWidth = 3;
 
+
   ctx.beginPath();
+
 
   ctx.arc(
     0,
@@ -938,75 +1921,133 @@ function drawPlayer() {
     Math.PI * 2
   );
 
+
   ctx.stroke();
 
-  ctx.fillStyle = "#07131b";
+
+  ctx.fillStyle =
+    "#07131b";
+
 
   ctx.beginPath();
+
 
   ctx.arc(
     0,
     0,
-    player.radius - 4,
+    player.radius - 3,
     0,
     Math.PI * 2
   );
 
+
   ctx.fill();
+
 
   /* Direction marker */
 
-  ctx.fillStyle = "#5de7ff";
+  ctx.fillStyle =
+    "#5de7ff";
+
 
   ctx.beginPath();
 
-  ctx.moveTo(19, 0);
-  ctx.lineTo(8, -5);
-  ctx.lineTo(8, 5);
+
+  ctx.moveTo(
+    14,
+    0
+  );
+
+
+  ctx.lineTo(
+    6,
+    -4
+  );
+
+
+  ctx.lineTo(
+    6,
+    4
+  );
+
+
   ctx.closePath();
 
+
   ctx.fill();
+
 
   /* Block ring */
 
   if (blocking) {
 
-    ctx.strokeStyle = "#ffffff";
+    ctx.strokeStyle =
+      "#ffffff";
+
+
     ctx.lineWidth = 5;
 
+
     ctx.beginPath();
+
 
     ctx.arc(
       0,
       0,
-      30,
+      24,
       0,
       Math.PI * 2
     );
 
+
     ctx.stroke();
+
   }
 
+
   ctx.restore();
+
 }
+
+
+/* =========================
+   DRAW ENEMY
+========================= */
 
 function drawEnemy() {
 
+  const enemyColor =
+    getEnemyColor();
+
+
   ctx.save();
 
-  ctx.translate(enemy.x, enemy.y);
 
-  ctx.shadowBlur = 20;
-  ctx.shadowColor = "#ff405f";
+  ctx.translate(
+    enemy.x,
+    enemy.y
+  );
+
+
+  ctx.shadowBlur =
+    20;
+
+
+  ctx.shadowColor =
+    enemyColor;
+
 
   ctx.strokeStyle =
     enemy.hitFlash > 0
       ? "#ffffff"
-      : "#ff536d";
+      : enemyColor;
+
 
   ctx.lineWidth = 3;
 
+
   ctx.beginPath();
+
 
   ctx.arc(
     0,
@@ -1016,60 +2057,108 @@ function drawEnemy() {
     Math.PI * 2
   );
 
+
   ctx.stroke();
 
-  ctx.fillStyle = "#17080d";
+
+  ctx.fillStyle =
+    "#17080d";
+
 
   ctx.beginPath();
+
 
   ctx.arc(
     0,
     0,
-    enemy.radius - 4,
+    enemy.radius - 3,
     0,
     Math.PI * 2
   );
 
+
   ctx.fill();
 
+
   ctx.restore();
+
 
   /* Enemy health */
 
   const width = 70;
+
+
   const healthRatio =
-    enemy.health / enemy.maxHealth;
+    enemy.health /
+    enemy.maxHealth;
 
-  ctx.fillStyle = "rgba(0,0,0,.5)";
+
+  ctx.fillStyle =
+    "rgba(0,0,0,.5)";
+
 
   ctx.fillRect(
-    enemy.x - width / 2,
-    enemy.y - 34,
+
+    enemy.x -
+      width / 2,
+
+    enemy.y -
+      29,
+
     width,
+
     5
+
   );
 
-  ctx.fillStyle = "#ff536d";
+
+  ctx.fillStyle =
+    enemyColor;
+
 
   ctx.fillRect(
-    enemy.x - width / 2,
-    enemy.y - 34,
-    width * healthRatio,
+
+    enemy.x -
+      width / 2,
+
+    enemy.y -
+      29,
+
+    width *
+      healthRatio,
+
     5
+
   );
+
 }
+
+
+/* =========================
+   PARTICLES
+========================= */
 
 function drawParticles() {
 
-  for (const p of particles) {
+  for (
+    const p of particles
+  ) {
 
     const alpha =
-      clamp(p.life / p.maxLife, 0, 1);
+      clamp(
+        p.life /
+        p.maxLife,
+        0,
+        1
+      );
+
 
     ctx.fillStyle =
       `rgba(100,220,255,${alpha})`;
 
+
     ctx.beginPath();
+
 
     ctx.arc(
       p.x,
@@ -1079,51 +2168,91 @@ function drawParticles() {
       Math.PI * 2
     );
 
+
     ctx.fill();
+
   }
+
 }
+
+
+/* =========================
+   DRAW
+========================= */
 
 function draw() {
 
   drawArena();
 
-  for (const p of projectiles) {
+
+  for (
+    const p of projectiles
+  ) {
 
     drawDisc(
+
       p.x,
+
       p.y,
+
       p.angle,
+
       p.owner === "enemy"
+
     );
+
   }
+
 
   drawParticles();
 
+
   drawPlayer();
+
   drawEnemy();
+
 }
 
+
 /* =========================
-   LOOP
+   GAME LOOP
 ========================= */
 
 function loop(timestamp) {
 
   const dt =
     Math.min(
+
       .033,
-      (timestamp - lastTime) / 1000 || 0
+
+      (
+        timestamp -
+        lastTime
+      ) / 1000 || 0
+
     );
 
-  lastTime = timestamp;
+
+  lastTime =
+    timestamp;
+
 
   update(dt);
+
   draw();
 
-  requestAnimationFrame(loop);
+
+  requestAnimationFrame(
+    loop
+  );
+
 }
 
-requestAnimationFrame(loop);
+
+requestAnimationFrame(
+  loop
+);
+
 
 /* =========================
    HUD
@@ -1131,13 +2260,20 @@ requestAnimationFrame(loop);
 
 function updateHUD() {
 
-  roundText.textContent = round;
-  scoreText.textContent = score;
-  energyText.textContent = energy;
+  roundText.textContent =
+    round;
+
+  scoreText.textContent =
+    score;
+
+  energyText.textContent =
+    energy;
+
 }
 
+
 /* =========================
-   GAME START / END
+   START / END
 ========================= */
 
 function startGame() {
@@ -1146,109 +2282,177 @@ function startGame() {
 
   running = true;
 
-  startScreen.style.display = "none";
-  gameOver.style.display = "none";
+  startScreen.style.display =
+    "none";
+
+  gameOver.style.display =
+    "none";
+
 }
+
 
 function endGame() {
 
   running = false;
 
+
   finalScore.textContent =
     "SCORE " + score;
 
-  gameOver.style.display = "flex";
+
+  gameOver.style.display =
+    "flex";
+
 }
+
 
 /* =========================
    JOYSTICK
 ========================= */
 
-let joystickPointer = null;
+let joystickPointer =
+  null;
+
 
 function updateJoystick(e) {
 
   const rect =
     joystick.getBoundingClientRect();
 
+
   const centerX =
-    rect.left + rect.width / 2;
+    rect.left +
+    rect.width / 2;
+
 
   const centerY =
-    rect.top + rect.height / 2;
+    rect.top +
+    rect.height / 2;
+
 
   let dx =
-    e.clientX - centerX;
+    e.clientX -
+    centerX;
+
 
   let dy =
-    e.clientY - centerY;
+    e.clientY -
+    centerY;
+
 
   const max =
-    rect.width * .35;
+    rect.width *
+    .35;
+
 
   const dist =
-    Math.hypot(dx, dy);
+    Math.hypot(
+      dx,
+      dy
+    );
+
 
   if (dist > max) {
 
-    dx = dx / dist * max;
-    dy = dy / dist * max;
+    dx =
+      dx / dist *
+      max;
+
+    dy =
+      dy / dist *
+      max;
+
   }
 
-  joystickX = dx / max;
-  joystickY = dy / max;
+
+  joystickX =
+    dx / max;
+
+
+  joystickY =
+    dy / max;
+
 
   stick.style.transform =
     `translate(${dx}px, ${dy}px)`;
+
 }
+
 
 joystick.addEventListener(
   "pointerdown",
   e => {
 
-    joystickPointer = e.pointerId;
+    joystickPointer =
+      e.pointerId;
+
 
     joystick.setPointerCapture(
       e.pointerId
     );
 
+
     updateJoystick(e);
+
   }
 );
+
 
 joystick.addEventListener(
   "pointermove",
   e => {
 
-    if (e.pointerId === joystickPointer) {
+    if (
+      e.pointerId ===
+      joystickPointer
+    ) {
+
       updateJoystick(e);
+
     }
+
   }
 );
 
+
 function releaseJoystick(e) {
 
-  if (e.pointerId !== joystickPointer)
+  if (
+    e.pointerId !==
+    joystickPointer
+  ) {
+
     return;
 
-  joystickPointer = null;
+  }
+
+
+  joystickPointer =
+    null;
+
 
   joystickX = 0;
+
   joystickY = 0;
+
 
   stick.style.transform =
     "translate(0,0)";
+
 }
+
 
 joystick.addEventListener(
   "pointerup",
   releaseJoystick
 );
 
+
 joystick.addEventListener(
   "pointercancel",
   releaseJoystick
 );
+
 
 /* =========================
    BUTTONS
@@ -1261,8 +2465,10 @@ throwBtn.addEventListener(
     e.preventDefault();
 
     throwDisc();
+
   }
 );
+
 
 dashBtn.addEventListener(
   "pointerdown",
@@ -1271,8 +2477,10 @@ dashBtn.addEventListener(
     e.preventDefault();
 
     dash();
+
   }
 );
+
 
 blockBtn.addEventListener(
   "pointerdown",
@@ -1281,29 +2489,40 @@ blockBtn.addEventListener(
     e.preventDefault();
 
     blocking = true;
+
   }
 );
+
 
 blockBtn.addEventListener(
   "pointerup",
   () => {
+
     blocking = false;
+
   }
 );
+
 
 blockBtn.addEventListener(
   "pointercancel",
   () => {
+
     blocking = false;
+
   }
 );
+
 
 blockBtn.addEventListener(
   "pointerleave",
   () => {
+
     blocking = false;
+
   }
 );
+
 
 /* =========================
    START BUTTONS
@@ -1316,6 +2535,7 @@ document
     startGame
   );
 
+
 document
   .getElementById("restartBtn")
   .addEventListener(
@@ -1323,15 +2543,27 @@ document
     startGame
   );
 
-/* Prevent iPhone scrolling */
+
+/* =========================
+   PREVENT IPHONE SCROLLING
+========================= */
 
 document.addEventListener(
   "touchmove",
   e => {
+
     e.preventDefault();
+
   },
-  { passive: false }
+  {
+    passive: false
+  }
 );
+
+
+/* =========================
+   INITIALIZE
+========================= */
 
 resetGame();
 
