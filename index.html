@@ -573,28 +573,17 @@ let round = 1;
 
 let energy = 100;
 
-
-/*
-   NEW:
-   Tracks how long the current
-   game has been running.
-*/
-
 let gameTime = 0;
-
 
 let particles = [];
 
 let projectiles = [];
 
-
 let joystickX = 0;
 
 let joystickY = 0;
 
-
 let blocking = false;
-
 
 let player;
 
@@ -695,17 +684,6 @@ function spawnParticle(
    ENEMY COLOR
 ========================= */
 
-/*
-   0 - 60 seconds:
-   RED
-
-   60 - 65 seconds:
-   YELLOW
-
-   65+ seconds:
-   ORANGE
-*/
-
 function getEnemyColor() {
 
   if (gameTime < 60) {
@@ -764,14 +742,6 @@ function createDisc(
 }
 
 
-/*
-   Checks whether a character
-   already has a disc flying.
-
-   This guarantees only ONE
-   disc can exist per character.
-*/
-
 function hasActiveDisc(owner) {
 
   return projectiles.some(
@@ -809,12 +779,12 @@ function resetGame() {
       H * .5,
 
     /*
-       Smaller character.
+       FASTER PLAYER
     */
 
     radius: 14,
 
-    speed: 185,
+    speed: 255,
 
     dashCooldown: 0,
 
@@ -832,12 +802,12 @@ function resetGame() {
       H * .5,
 
     /*
-       Smaller character.
+       FASTER ENEMY
     */
 
     radius: 14,
 
-    speed: 100,
+    speed: 145,
 
     cooldown: 1.3,
 
@@ -845,7 +815,16 @@ function resetGame() {
 
     maxHealth: 3,
 
-    hitFlash: 0
+    hitFlash: 0,
+
+    /*
+       NEW:
+       Enemy must recover its
+       disc or hit the player
+       before throwing again.
+    */
+
+    discRecovered: true
 
   };
 
@@ -864,13 +843,6 @@ function throwDisc() {
   if (!running)
     return;
 
-
-  /*
-     NEW:
-     Player cannot throw another
-     disc while one is already
-     flying.
-  */
 
   if (
     hasActiveDisc("player")
@@ -1022,10 +994,20 @@ function dash() {
 function enemyAttack() {
 
   /*
-     NEW:
-     Enemy can only have ONE
-     disc flying at a time.
+     Enemy may only throw when
+     its previous disc has been
+     recovered or has hit the
+     player.
   */
+
+  if (
+    !enemy.discRecovered
+  ) {
+
+    return;
+
+  }
+
 
   if (
     hasActiveDisc("enemy")
@@ -1056,6 +1038,16 @@ function enemyAttack() {
     angle
 
   );
+
+
+  /*
+     The enemy now has to wait
+     for this disc to return
+     or hit the player.
+  */
+
+  enemy.discRecovered =
+    false;
 
 
   enemy.cooldown =
@@ -1116,8 +1108,12 @@ function defeatEnemy() {
 
 
   enemy.speed =
-    95 +
-    round * 8;
+    135 +
+    round * 10;
+
+
+  enemy.discRecovered =
+    true;
 
 
   energy =
@@ -1141,15 +1137,6 @@ function update(dt) {
   if (!running)
     return;
 
-
-  /*
-     NEW:
-     Game timer.
-
-     This is independent of
-     rounds and continues through
-     the entire match.
-  */
 
   gameTime += dt;
 
@@ -1301,15 +1288,19 @@ function update(dt) {
 
 
   /*
-     Enemy only attacks when
-     it doesn't already have a
-     disc flying.
+     Enemy attacks only when:
+
+     1. Cooldown is ready
+     2. Player is within range
+     3. No enemy disc is flying
+     4. Previous disc was recovered
   */
 
   if (
     enemy.cooldown <= 0 &&
     dist < 520 &&
-    !hasActiveDisc("enemy")
+    !hasActiveDisc("enemy") &&
+    enemy.discRecovered
   ) {
 
     enemyAttack();
@@ -1391,6 +1382,49 @@ function update(dt) {
 
 
     /* =========================
+       ENEMY CATCHES ITS DISC
+    ========================= */
+
+    if (
+      p.owner === "enemy" &&
+      distance(
+        p,
+        enemy
+      ) <
+      p.radius +
+      enemy.radius
+    ) {
+
+      /*
+         The enemy caught/recovered
+         its disc.
+
+         It may now throw again.
+      */
+
+      enemy.discRecovered =
+        true;
+
+
+      spawnParticle(
+        p.x,
+        p.y,
+        10
+      );
+
+
+      projectiles.splice(
+        i,
+        1
+      );
+
+
+      continue;
+
+    }
+
+
+    /* =========================
        PLAYER DISC HITS ENEMY
     ========================= */
 
@@ -1416,12 +1450,6 @@ function update(dt) {
         14
       );
 
-
-      /*
-         Disc is destroyed,
-         allowing player to throw
-         again.
-      */
 
       projectiles.splice(
         i,
@@ -1456,6 +1484,19 @@ function update(dt) {
       p.radius +
       player.radius
     ) {
+
+      /*
+         The enemy's disc has now
+         completed its attack.
+
+         Whether blocked or not,
+         the enemy is allowed to
+         throw again afterward.
+      */
+
+      enemy.discRecovered =
+        true;
+
 
       if (blocking) {
 
@@ -1523,20 +1564,53 @@ function update(dt) {
 
 
     /*
-       Disc expired.
+       IMPORTANT:
+       Enemy discs no longer
+       become available just
+       because they expire.
 
-       This also frees the character
-       to throw another disc.
+       If the enemy disc reaches
+       its 3-second lifetime without
+       catching the enemy or hitting
+       the player, it disappears,
+       but the enemy still cannot
+       throw again.
+
+       This keeps the rule strict:
+       catch it OR hit the player.
     */
 
     if (
       p.life <= 0
     ) {
 
-      projectiles.splice(
-        i,
-        1
-      );
+      if (
+        p.owner === "player"
+      ) {
+
+        projectiles.splice(
+          i,
+          1
+        );
+
+      }
+      else {
+
+        /*
+           Keep the enemy's disc
+           state locked.
+
+           Remove the visual disc,
+           but the enemy must wait
+           for a valid recovery/hit.
+        */
+
+        projectiles.splice(
+          i,
+          1
+        );
+
+      }
 
     }
 
@@ -1910,17 +1984,21 @@ function drawPlayer() {
   ctx.lineWidth = 3;
 
 
+  /*
+     TALL VERTICAL OVAL
+  */
+
   ctx.beginPath();
 
-
-  ctx.arc(
+  ctx.ellipse(
     0,
     0,
-    player.radius,
+    11,
+    17,
+    0,
     0,
     Math.PI * 2
   );
-
 
   ctx.stroke();
 
@@ -1931,15 +2009,15 @@ function drawPlayer() {
 
   ctx.beginPath();
 
-
-  ctx.arc(
+  ctx.ellipse(
     0,
     0,
-    player.radius - 3,
+    8,
+    14,
+    0,
     0,
     Math.PI * 2
   );
-
 
   ctx.fill();
 
@@ -1991,10 +2069,12 @@ function drawPlayer() {
     ctx.beginPath();
 
 
-    ctx.arc(
+    ctx.ellipse(
       0,
       0,
+      17,
       24,
+      0,
       0,
       Math.PI * 2
     );
@@ -2046,17 +2126,21 @@ function drawEnemy() {
   ctx.lineWidth = 3;
 
 
+  /*
+     TALL VERTICAL OVAL
+  */
+
   ctx.beginPath();
 
-
-  ctx.arc(
+  ctx.ellipse(
     0,
     0,
-    enemy.radius,
+    11,
+    17,
+    0,
     0,
     Math.PI * 2
   );
-
 
   ctx.stroke();
 
@@ -2067,15 +2151,15 @@ function drawEnemy() {
 
   ctx.beginPath();
 
-
-  ctx.arc(
+  ctx.ellipse(
     0,
     0,
-    enemy.radius - 3,
+    8,
+    14,
+    0,
     0,
     Math.PI * 2
   );
-
 
   ctx.fill();
 
