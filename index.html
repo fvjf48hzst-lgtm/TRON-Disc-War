@@ -2,334 +2,328 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1,
-      user-scalable=no, viewport-fit=cover">
-
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+/>
 <title>DISC//ARENA</title>
 
 <style>
-
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-}
-
-html,
-body {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #03070c;
-  color: white;
-  font-family: Arial, Helvetica, sans-serif;
-  touch-action: none;
-}
-
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#game {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  max-width: 600px;
-  overflow: hidden;
-
-  background:
-    radial-gradient(
-      circle at center,
-      #101923 0%,
-      #050a10 45%,
-      #020408 100%
-    );
-}
-
-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-/* =========================
-   HUD
-========================= */
-
-#hud {
-  position: absolute;
-
-  top: max(16px, env(safe-area-inset-top));
-  left: 0;
-
-  width: 100%;
-
-  padding: 12px 16px;
-
-  display: flex;
-  justify-content: space-between;
-
-  pointer-events: none;
-
-  z-index: 5;
-}
-
-.hudBox {
-  background: rgba(0,0,0,.45);
-
-  border: 1px solid rgba(255,255,255,.16);
-
-  padding: 7px 11px;
-
-  border-radius: 9px;
-
-  backdrop-filter: blur(5px);
-}
-
-.label {
-  font-size: 9px;
-  letter-spacing: 2px;
-  opacity: .6;
-}
-
-.value {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-/* =========================
-   TOUCH CONTROLS
-========================= */
-
-#controls {
-  position: absolute;
-
-  bottom: max(18px, env(safe-area-inset-bottom));
-  left: 0;
-
-  width: 100%;
-
-  padding: 12px 16px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-
-  z-index: 10;
-}
-
-#joystick {
-  width: 132px;
-  height: 132px;
-
-  border-radius: 50%;
-
-  background: rgba(255,255,255,.055);
-
-  border: 1px solid rgba(255,255,255,.16);
-
-  position: relative;
-
-  touch-action: none;
-}
-
-#stick {
-  position: absolute;
-
-  width: 58px;
-  height: 58px;
-
-  left: 37px;
-  top: 37px;
-
-  border-radius: 50%;
-
-  background: rgba(255,255,255,.12);
-
-  border: 1px solid rgba(255,255,255,.3);
-}
-
-#buttons {
-  display: grid;
-
-  grid-template-columns: repeat(2, 76px);
-
-  gap: 10px;
-}
-
-.action {
-  width: 76px;
-  height: 58px;
-
-  border-radius: 15px;
-
-  border: 1px solid rgba(255,255,255,.22);
-
-  background: rgba(255,255,255,.07);
-
-  color: white;
-
-  font-weight: bold;
-  font-size: 11px;
-  letter-spacing: 1px;
-
-  touch-action: manipulation;
-}
-
-.action:active {
-  transform: scale(.94);
-
-  background: rgba(255,255,255,.18);
-}
-
-#throwBtn {
-  grid-column: span 2;
-
-  width: 162px;
-
-  background: rgba(0,180,255,.12);
-
-  border-color: rgba(0,200,255,.55);
-}
-
-/* =========================
-   START / GAME OVER
-========================= */
-
-#startScreen,
-#gameOver {
-  position: absolute;
-
-  inset: 0;
-
-  z-index: 20;
-
-  display: flex;
-
-  flex-direction: column;
-
-  justify-content: center;
-
-  align-items: center;
-
-  text-align: center;
-
-  padding: 30px;
-
-  background: rgba(1,4,8,.82);
-
-  backdrop-filter: blur(8px);
-}
-
-#gameOver {
-  display: none;
-}
-
-.title {
-  font-size: clamp(38px, 12vw, 72px);
-
-  font-weight: 900;
-
-  letter-spacing: 7px;
-
-  margin: 0;
-
-  text-shadow:
-    0 0 10px rgba(0,200,255,.8),
-    0 0 35px rgba(0,120,255,.35);
-}
-
-.subtitle {
-  margin-top: 10px;
-
-  font-size: 11px;
-
-  letter-spacing: 4px;
-
-  opacity: .55;
-}
-
-.startButton {
-  margin-top: 35px;
-
-  min-width: 190px;
-
-  padding: 16px 25px;
-
-  border-radius: 12px;
-
-  border: 1px solid rgba(0,210,255,.7);
-
-  background: rgba(0,160,255,.12);
-
-  color: white;
-
-  font-size: 14px;
-
-  font-weight: bold;
-
-  letter-spacing: 3px;
-}
-
-.instructions {
-  margin-top: 24px;
-
-  max-width: 310px;
-
-  font-size: 12px;
-
-  line-height: 1.7;
-
-  opacity: .6;
-}
-
-/* =========================
-   PORTRAIT FIRST
-========================= */
-
-@media (orientation: landscape) {
-
-  #game {
-    max-width: 430px;
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
   }
 
-}
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #05070d;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    touch-action: none;
+  }
 
-/* =========================
-   SMALL SCREENS
-========================= */
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-@media (max-height: 700px) {
+  #game {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    max-width: 600px;
+    overflow: hidden;
+    background: #05070d;
+  }
+
+  canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* =========================
+     HUD
+  ========================= */
+
+  #hud {
+    position: absolute;
+    top: env(safe-area-inset-top, 0px);
+    left: 0;
+    width: 100%;
+    padding: 14px 16px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .hudBox {
+    min-width: 85px;
+  }
+
+  .hudLabel {
+    font-size: 10px;
+    letter-spacing: 2px;
+    opacity: .55;
+    margin-bottom: 3px;
+  }
+
+  .hudValue {
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+
+  #energyContainer {
+    position: absolute;
+    top: 53px;
+    left: 16px;
+    right: 16px;
+    height: 5px;
+    border-radius: 10px;
+    background: rgba(255,255,255,.12);
+    overflow: hidden;
+  }
+
+  #energyBar {
+    width: 100%;
+    height: 100%;
+    background: #48e8ff;
+    transition: width .15s linear;
+  }
+
+  /* =========================
+     Controls
+  ========================= */
 
   #controls {
-    bottom: 8px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 190px;
+    padding:
+      12px
+      18px
+      calc(18px + env(safe-area-inset-bottom, 0px));
+    pointer-events: none;
+    z-index: 15;
   }
 
   #joystick {
-    width: 112px;
-    height: 112px;
+    position: absolute;
+    left: 20px;
+    bottom: 24px;
+    width: 118px;
+    height: 118px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,.2);
+    background: rgba(255,255,255,.035);
+    pointer-events: auto;
+    touch-action: none;
   }
 
-  #stick {
-    width: 50px;
-    height: 50px;
-
-    left: 31px;
-    top: 31px;
+  #joystick::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 56px;
+    height: 56px;
+    margin-left: -28px;
+    margin-top: -28px;
+    border-radius: 50%;
+    border: 2px solid rgba(72,232,255,.65);
+    background: rgba(72,232,255,.12);
+    box-shadow: 0 0 20px rgba(72,232,255,.18);
+    pointer-events: none;
   }
 
-  .action {
-    height: 50px;
+  #joystickKnob {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 38px;
+    height: 38px;
+    margin-left: -19px;
+    margin-top: -19px;
+    border-radius: 50%;
+    background: #48e8ff;
+    box-shadow: 0 0 18px rgba(72,232,255,.7);
+    pointer-events: none;
+    transform: translate(0,0);
   }
 
-}
+  .actionButtons {
+    position: absolute;
+    right: 18px;
+    bottom: 24px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    pointer-events: auto;
+  }
 
+  .actionButton {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,.25);
+    background: rgba(255,255,255,.07);
+    color: white;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    pointer-events: auto;
+  }
+
+  .actionButton:active {
+    transform: scale(.93);
+    background: rgba(255,255,255,.16);
+  }
+
+  #throwButton {
+    width: 84px;
+    height: 84px;
+    border-color: rgba(72,232,255,.65);
+    color: #48e8ff;
+    box-shadow: 0 0 22px rgba(72,232,255,.1);
+  }
+
+  #dashButton {
+    border-color: rgba(255,255,255,.35);
+  }
+
+  #blockButton {
+    border-color: rgba(255,230,80,.45);
+    color: #ffe650;
+  }
+
+  /* =========================
+     Screens
+  ========================= */
+
+  .screen {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 28px;
+    background:
+      radial-gradient(
+        circle at center,
+        rgba(20,35,55,.45),
+        rgba(2,4,9,.96) 72%
+      );
+  }
+
+  .screenCard {
+    width: min(100%, 430px);
+    text-align: center;
+  }
+
+  .logo {
+    font-size: clamp(38px, 11vw, 66px);
+    font-weight: 900;
+    letter-spacing: 4px;
+    line-height: 1;
+    margin-bottom: 12px;
+    text-shadow:
+      0 0 12px rgba(72,232,255,.55),
+      0 0 30px rgba(72,232,255,.2);
+  }
+
+  .slash {
+    color: #48e8ff;
+  }
+
+  .subtitle {
+    font-size: 11px;
+    letter-spacing: 4px;
+    opacity: .5;
+    margin-bottom: 38px;
+  }
+
+  .startButton {
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 190px;
+    height: 58px;
+    padding: 0 25px;
+    border: 1px solid rgba(72,232,255,.7);
+    border-radius: 8px;
+    background: rgba(72,232,255,.08);
+    color: #48e8ff;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    cursor: pointer;
+    touch-action: manipulation;
+    pointer-events: auto;
+    position: relative;
+    z-index: 40;
+    user-select: none;
+    -webkit-user-select: none;
+    box-shadow:
+      0 0 25px rgba(72,232,255,.08),
+      inset 0 0 20px rgba(72,232,255,.03);
+  }
+
+  .startButton:active {
+    transform: scale(.97);
+    background: rgba(72,232,255,.18);
+  }
+
+  .instructions {
+    margin-top: 30px;
+    font-size: 11px;
+    line-height: 1.8;
+    letter-spacing: 1px;
+    opacity: .55;
+  }
+
+  #gameOver {
+    display: none;
+  }
+
+  .gameOverTitle {
+    color: #ff536d;
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    margin-bottom: 12px;
+  }
+
+  .finalScore {
+    font-size: 15px;
+    letter-spacing: 3px;
+    opacity: .65;
+    margin-bottom: 30px;
+  }
+
+  @media (orientation: landscape) {
+    #game {
+      max-width: 430px;
+    }
+  }
 </style>
 </head>
 
@@ -340,404 +334,1199 @@ canvas {
   <canvas id="canvas"></canvas>
 
   <!-- HUD -->
-
   <div id="hud">
 
     <div class="hudBox">
-
-      <div class="label">
-        ROUND
-      </div>
-
-      <div class="value" id="round">
-        1
-      </div>
-
+      <div class="hudLabel">ROUND</div>
+      <div class="hudValue" id="roundText">1</div>
     </div>
 
-    <div class="hudBox">
-
-      <div class="label">
-        SCORE
-      </div>
-
-      <div class="value" id="score">
-        0
-      </div>
-
-    </div>
-
-    <div class="hudBox">
-
-      <div class="label">
-        ENERGY
-      </div>
-
-      <div class="value" id="energy">
-        100
-      </div>
-
+    <div class="hudBox" style="text-align:right;">
+      <div class="hudLabel">SCORE</div>
+      <div class="hudValue" id="scoreText">0</div>
     </div>
 
   </div>
 
+  <div id="energyContainer">
+    <div id="energyBar"></div>
+  </div>
 
   <!-- CONTROLS -->
-
   <div id="controls">
 
     <div id="joystick">
-
-      <div id="stick"></div>
-
+      <div id="joystickKnob"></div>
     </div>
 
-    <div id="buttons">
+    <div class="actionButtons">
 
       <button
-        class="action"
-        id="blockBtn">
+        id="blockButton"
+        class="actionButton"
+        type="button"
+      >
         BLOCK
       </button>
 
       <button
-        class="action"
-        id="dashBtn">
+        id="dashButton"
+        class="actionButton"
+        type="button"
+      >
         DASH
       </button>
 
       <button
-        class="action"
-        id="throwBtn">
-        THROW DISC
+        id="throwButton"
+        class="actionButton"
+        type="button"
+      >
+        THROW
       </button>
 
     </div>
 
   </div>
 
-
   <!-- START SCREEN -->
+  <div id="startScreen" class="screen">
 
-  <div id="startScreen">
+    <div class="screenCard">
 
-    <h1 class="title">
-      DISC//ARENA
-    </h1>
+      <div class="logo">
+        DISC<span class="slash">//</span>ARENA
+      </div>
 
-    <div class="subtitle">
-      DIGITAL COMBAT PROTOTYPE
-    </div>
+      <div class="subtitle">
+        DIGITAL COMBAT PROTOTYPE
+      </div>
 
-    <button
-      class="startButton"
-      id="startBtn">
-      ENTER ARENA
-    </button>
+      <button
+        id="startBtn"
+        class="startButton"
+        type="button"
+      >
+        ENTER ARENA
+      </button>
 
-    <div class="instructions">
-
-      Move with the joystick.<br>
-
-      Throw your disc at the enemy.<br>
-
-      Block incoming attacks.<br>
-
-      Dash to escape danger.
+      <div class="instructions">
+        BLUE PLAYER — BOTTOM<br>
+        RED ENEMY — TOP<br><br>
+        MOVE • THROW • BLOCK • DASH
+      </div>
 
     </div>
 
   </div>
 
-
   <!-- GAME OVER -->
+  <div id="gameOver" class="screen">
 
-  <div id="gameOver">
+    <div class="screenCard">
 
-    <h1 class="title">
-      ELIMINATED
-    </h1>
+      <div class="gameOverTitle">
+        ELIMINATED
+      </div>
 
-    <div
-      class="subtitle"
-      id="finalScore">
-      SCORE 0
+      <div class="finalScore">
+        FINAL SCORE:
+        <span id="finalScore">0</span>
+      </div>
+
+      <button
+        id="restartBtn"
+        class="startButton"
+        type="button"
+      >
+        REMATCH
+      </button>
+
     </div>
-
-    <button
-      class="startButton"
-      id="restartBtn">
-      REMATCH
-    </button>
 
   </div>
 
 </div>
 
-
 <script>
+/* =========================================================
+   DISC//ARENA
+   ========================================================= */
 
-/* =========================
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const startScreen = document.getElementById("startScreen");
+const gameOverScreen = document.getElementById("gameOver");
+
+const startBtn = document.getElementById("startBtn");
+const restartBtn = document.getElementById("restartBtn");
+
+const roundText = document.getElementById("roundText");
+const scoreText = document.getElementById("scoreText");
+const energyBar = document.getElementById("energyBar");
+const finalScore = document.getElementById("finalScore");
+
+const joystick = document.getElementById("joystick");
+const joystickKnob = document.getElementById("joystickKnob");
+
+const blockButton = document.getElementById("blockButton");
+const dashButton = document.getElementById("dashButton");
+const throwButton = document.getElementById("throwButton");
+
+
+/* =========================================================
    CANVAS
-========================= */
-
-const canvas =
-  document.getElementById("canvas");
-
-const ctx =
-  canvas.getContext("2d");
-
-const game =
-  document.getElementById("game");
-
-
-const roundText =
-  document.getElementById("round");
-
-const scoreText =
-  document.getElementById("score");
-
-const energyText =
-  document.getElementById("energy");
-
-
-const startScreen =
-  document.getElementById("startScreen");
-
-const gameOver =
-  document.getElementById("gameOver");
-
-const finalScore =
-  document.getElementById("finalScore");
-
-
-const joystick =
-  document.getElementById("joystick");
-
-const stick =
-  document.getElementById("stick");
-
-
-const blockBtn =
-  document.getElementById("blockBtn");
-
-const dashBtn =
-  document.getElementById("dashBtn");
-
-const throwBtn =
-  document.getElementById("throwBtn");
-
+   ========================================================= */
 
 let W = 0;
 let H = 0;
+let DPR = 1;
 
+function resizeCanvas() {
 
-/* =========================
-   RESIZE
-========================= */
-
-function resize() {
-
-  const rect =
-    game.getBoundingClientRect();
+  const rect = canvas.getBoundingClientRect();
 
   W = rect.width;
   H = rect.height;
 
-  const dpr =
-    Math.min(
-      window.devicePixelRatio || 1,
-      2
-    );
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
 
-  canvas.width =
-    W * dpr;
+  canvas.width = Math.floor(W * DPR);
+  canvas.height = Math.floor(H * DPR);
 
-  canvas.height =
-    H * dpr;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
 
-  ctx.setTransform(
-    dpr,
-    0,
-    0,
-    dpr,
-    0,
-    0
-  );
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
 
-  if (player && enemy) {
 
-    keepPlayersOnTheirSides();
+/* =========================================================
+   ARENA
+   ========================================================= */
 
-  }
+function arenaTop() {
+  return 70;
+}
 
+function arenaBottom() {
+  return H - 105;
+}
+
+function arenaHeight() {
+  return arenaBottom() - arenaTop();
+}
+
+function centerLine() {
+  return arenaTop() + arenaHeight() / 2;
 }
 
 
-window.addEventListener(
-  "resize",
-  resize
-);
-
-resize();
-
-
-/* =========================
+/* =========================================================
    GAME STATE
-========================= */
+   ========================================================= */
 
 let running = false;
 
-let lastTime = 0;
-
-let score = 0;
-
 let round = 1;
-
+let score = 0;
 let energy = 100;
 
-let gameTime = 0;
+let gameStartTime = 0;
+
+let lastTime = performance.now();
 
 let particles = [];
 
-let projectiles = [];
-
-let joystickX = 0;
-
-let joystickY = 0;
-
-let blocking = false;
-
 let player;
-
 let enemy;
 
+let playerDisc = null;
+let enemyDisc = null;
 
-/* =========================
-   ARENA BOUNDS
-========================= */
 
-function arenaTop() {
+/* =========================================================
+   PLAYER
+   ========================================================= */
 
-  return 70;
+function createPlayer() {
 
+  return {
+    x: W / 2,
+    y: centerLine() + arenaHeight() * .25,
+
+    radiusX: 15,
+    radiusY: 25,
+
+    speed: 255,
+
+    invincible: 0,
+    dashCooldown: 0,
+
+    blocking: false,
+
+    directionX: 0,
+    directionY: -1
+  };
 }
 
 
-function arenaBottom() {
+/* =========================================================
+   ENEMY
+   ========================================================= */
 
-  return H - 105;
+function createEnemy() {
 
+  return {
+    x: W / 2,
+    y: centerLine() - arenaHeight() * .25,
+
+    radiusX: 15,
+    radiusY: 25,
+
+    speed: 145,
+
+    throwCooldown: .8,
+
+    discRecovered: true,
+
+    directionX: 0,
+    directionY: 1
+  };
 }
 
 
-function arenaHeight() {
+/* =========================================================
+   RESET
+   ========================================================= */
 
-  return arenaBottom() -
-         arenaTop();
+function resetGame() {
 
+  round = 1;
+  score = 0;
+  energy = 100;
+
+  gameStartTime = performance.now();
+
+  playerDisc = null;
+  enemyDisc = null;
+
+  player = createPlayer();
+  enemy = createEnemy();
+
+  particles = [];
+
+  updateHUD();
 }
 
 
-function centerLine() {
+/* =========================================================
+   START / END
+   ========================================================= */
+
+function startGame() {
+
+  resetGame();
+
+  running = true;
+
+  startScreen.style.display = "none";
+  gameOverScreen.style.display = "none";
+
+  lastTime = performance.now();
+}
+
+function endGame() {
+
+  running = false;
+
+  finalScore.textContent = score;
+
+  gameOverScreen.style.display = "flex";
+}
+
+
+/* =========================================================
+   HUD
+   ========================================================= */
+
+function updateHUD() {
+
+  roundText.textContent = round;
+  scoreText.textContent = score;
+
+  energyBar.style.width = Math.max(0, energy) + "%";
+
+  if (energy > 60) {
+    energyBar.style.background = "#48e8ff";
+  } else if (energy > 30) {
+    energyBar.style.background = "#ffe34d";
+  } else {
+    energyBar.style.background = "#ff536d";
+  }
+}
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+const keys = {
+  left: false,
+  right: false,
+  up: false,
+  down: false
+};
+
+let joystickActive = false;
+let joystickPointerId = null;
+
+let joystickX = 0;
+let joystickY = 0;
+
+
+/* Keyboard */
+
+window.addEventListener("keydown", e => {
+
+  if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") {
+    keys.left = true;
+  }
+
+  if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") {
+    keys.right = true;
+  }
+
+  if (e.key === "ArrowUp" || e.key.toLowerCase() === "w") {
+    keys.up = true;
+  }
+
+  if (e.key === "ArrowDown" || e.key.toLowerCase() === "s") {
+    keys.down = true;
+  }
+
+  if (e.code === "Space") {
+    throwPlayerDisc();
+  }
+
+  if (e.key.toLowerCase() === "e") {
+    dash();
+  }
+
+  if (e.key.toLowerCase() === "q") {
+    player.blocking = true;
+  }
+});
+
+window.addEventListener("keyup", e => {
+
+  if (e.key === "ArrowLeft" || e.key.toLowerCase() === "a") {
+    keys.left = false;
+  }
+
+  if (e.key === "ArrowRight" || e.key.toLowerCase() === "d") {
+    keys.right = false;
+  }
+
+  if (e.key === "ArrowUp" || e.key.toLowerCase() === "w") {
+    keys.up = false;
+  }
+
+  if (e.key === "ArrowDown" || e.key.toLowerCase() === "s") {
+    keys.down = false;
+  }
+
+  if (e.key.toLowerCase() === "q") {
+    player.blocking = false;
+  }
+});
+
+
+/* =========================================================
+   JOYSTICK
+   ========================================================= */
+
+function updateJoystick(clientX, clientY) {
+
+  const rect = joystick.getBoundingClientRect();
+
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  let dx = clientX - cx;
+  let dy = clientY - cy;
+
+  const maxDistance = 39;
+
+  const distance = Math.sqrt(dx * dx + dy * dy);
+
+  if (distance > maxDistance) {
+
+    dx = dx / distance * maxDistance;
+    dy = dy / distance * maxDistance;
+  }
+
+  joystickX = dx / maxDistance;
+  joystickY = dy / maxDistance;
+
+  joystickKnob.style.transform =
+    `translate(${dx}px, ${dy}px)`;
+}
+
+
+function resetJoystick() {
+
+  joystickActive = false;
+  joystickPointerId = null;
+
+  joystickX = 0;
+  joystickY = 0;
+
+  joystickKnob.style.transform =
+    "translate(0px, 0px)";
+}
+
+
+joystick.addEventListener("pointerdown", e => {
+
+  e.preventDefault();
+
+  joystickActive = true;
+  joystickPointerId = e.pointerId;
+
+  joystick.setPointerCapture(e.pointerId);
+
+  updateJoystick(e.clientX, e.clientY);
+});
+
+
+joystick.addEventListener("pointermove", e => {
+
+  if (!joystickActive) return;
+  if (e.pointerId !== joystickPointerId) return;
+
+  e.preventDefault();
+
+  updateJoystick(e.clientX, e.clientY);
+});
+
+
+joystick.addEventListener("pointerup", e => {
+
+  if (e.pointerId === joystickPointerId) {
+    resetJoystick();
+  }
+});
+
+
+joystick.addEventListener("pointercancel", resetJoystick);
+
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+function pressBlock(e) {
+
+  e.preventDefault();
+
+  player.blocking = true;
+}
+
+function releaseBlock(e) {
+
+  e.preventDefault();
+
+  player.blocking = false;
+}
+
+blockButton.addEventListener("pointerdown", pressBlock);
+blockButton.addEventListener("pointerup", releaseBlock);
+blockButton.addEventListener("pointercancel", releaseBlock);
+blockButton.addEventListener("pointerleave", releaseBlock);
+
+
+dashButton.addEventListener("pointerdown", e => {
+
+  e.preventDefault();
+
+  dash();
+});
+
+
+throwButton.addEventListener("pointerdown", e => {
+
+  e.preventDefault();
+
+  throwPlayerDisc();
+});
+
+
+/* =========================================================
+   START BUTTON
+   iPHONE-SAFE POINTER HANDLING
+   ========================================================= */
+
+function handleStartPress(e) {
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  startGame();
+}
+
+startBtn.addEventListener(
+  "pointerdown",
+  handleStartPress,
+  { passive: false }
+);
+
+restartBtn.addEventListener(
+  "pointerdown",
+  handleStartPress,
+  { passive: false }
+);
+
+
+/* Prevent accidental scrolling while playing */
+
+document.addEventListener(
+  "touchmove",
+  e => {
+
+    if (
+      e.target &&
+      e.target.closest &&
+      e.target.closest(".startButton")
+    ) {
+      return;
+    }
+
+    e.preventDefault();
+  },
+  { passive: false }
+);
+
+
+/* =========================================================
+   PLAYER MOVEMENT
+   ========================================================= */
+
+function updatePlayer(dt) {
+
+  let dx = joystickX;
+  let dy = joystickY;
+
+  if (!joystickActive) {
+
+    dx =
+      (keys.right ? 1 : 0) -
+      (keys.left ? 1 : 0);
+
+    dy =
+      (keys.down ? 1 : 0) -
+      (keys.up ? 1 : 0);
+  }
+
+  const magnitude =
+    Math.sqrt(dx * dx + dy * dy);
+
+  if (magnitude > 1) {
+
+    dx /= magnitude;
+    dy /= magnitude;
+  }
+
+  player.x += dx * player.speed * dt;
+  player.y += dy * player.speed * dt;
+
+  if (Math.abs(dx) + Math.abs(dy) > .05) {
+
+    player.directionX = dx;
+    player.directionY = dy;
+  }
+
+  keepPlayersOnTheirSides();
+
+  player.dashCooldown =
+    Math.max(0, player.dashCooldown - dt);
+
+  player.invincible =
+    Math.max(0, player.invincible - dt);
+}
+
+
+/* =========================================================
+   PLAYER LIMITS
+   ========================================================= */
+
+function keepPlayersOnTheirSides() {
+
+  const minX = 20;
+  const maxX = W - 20;
+
+  player.x = Math.max(
+    minX,
+    Math.min(maxX, player.x)
+  );
+
+  enemy.x = Math.max(
+    minX,
+    Math.min(maxX, enemy.x)
+  );
+
+
+  /* Blue player */
+
+  const playerTop =
+    centerLine() + 18;
+
+  const playerBottom =
+    arenaBottom() - 22;
+
+  player.y = Math.max(
+    playerTop,
+    Math.min(playerBottom, player.y)
+  );
+
+
+  /* Red enemy */
+
+  const enemyTop =
+    arenaTop() + 22;
+
+  const enemyBottom =
+    centerLine() - 18;
+
+  enemy.y = Math.max(
+    enemyTop,
+    Math.min(enemyBottom, enemy.y)
+  );
+}
+
+
+/* =========================================================
+   DASH
+   ========================================================= */
+
+function dash() {
+
+  if (!running) return;
+
+  if (player.dashCooldown > 0) return;
+
+  let dx = player.directionX;
+  let dy = player.directionY;
+
+  const len =
+    Math.sqrt(dx * dx + dy * dy);
+
+  if (len < .01) {
+    dy = -1;
+  } else {
+    dx /= len;
+    dy /= len;
+  }
+
+  player.x += dx * 105;
+  player.y += dy * 105;
+
+  player.invincible = .35;
+  player.dashCooldown = 1;
+
+  createBurst(
+    player.x,
+    player.y,
+    "#48e8ff",
+    14
+  );
+
+  keepPlayersOnTheirSides();
+}
+
+
+/* =========================================================
+   DISC THROW
+   ========================================================= */
+
+function throwPlayerDisc() {
+
+  if (!running) return;
+
+  if (playerDisc) return;
+
+  const dx = enemy.x - player.x;
+  const dy = enemy.y - player.y;
+
+  const len =
+    Math.sqrt(dx * dx + dy * dy) || 1;
+
+  const speed = 440;
+
+  playerDisc = {
+    owner: "player",
+
+    x: player.x,
+    y: player.y - 22,
+
+    vx: dx / len * speed,
+    vy: dy / len * speed,
+
+    radius: 9,
+
+    life: 6
+  };
+
+  createBurst(
+    player.x,
+    player.y,
+    "#48e8ff",
+    8
+  );
+}
+
+
+/* =========================================================
+   ENEMY AI
+   ========================================================= */
+
+function updateEnemy(dt) {
+
+  const dx = player.x - enemy.x;
+
+  const horizontalSpeed =
+    enemy.speed * dt;
+
+  if (Math.abs(dx) > 5) {
+
+    enemy.x +=
+      Math.sign(dx) *
+      Math.min(Math.abs(dx), horizontalSpeed);
+
+    enemy.directionX =
+      Math.sign(dx);
+  } else {
+
+    enemy.directionX = 0;
+  }
+
+
+  /*
+    Limited vertical movement.
+    Enemy stays entirely in top half.
+  */
+
+  const idealY =
+    centerLine() -
+    arenaHeight() * .25;
+
+  const verticalDifference =
+    idealY - enemy.y;
+
+  if (Math.abs(verticalDifference) > 4) {
+
+    enemy.y +=
+      Math.sign(verticalDifference) *
+      enemy.speed *
+      .28 *
+      dt;
+
+    enemy.directionY =
+      Math.sign(verticalDifference);
+  }
+
+
+  enemy.throwCooldown =
+    Math.max(
+      0,
+      enemy.throwCooldown - dt
+    );
+
+
+  /*
+    Enemy can only throw if its previous
+    disc has been recovered.
+  */
+
+  if (
+    enemy.throwCooldown <= 0 &&
+    enemy.discRecovered &&
+    !enemyDisc
+  ) {
+
+    throwEnemyDisc();
+  }
+
+  keepPlayersOnTheirSides();
+}
+
+
+/* =========================================================
+   ENEMY THROW
+   ========================================================= */
+
+function throwEnemyDisc() {
+
+  const dx = player.x - enemy.x;
+  const dy = player.y - enemy.y;
+
+  const len =
+    Math.sqrt(dx * dx + dy * dy) || 1;
+
+  const speed =
+    385 + Math.min(round * 8, 90);
+
+  enemyDisc = {
+
+    owner: "enemy",
+
+    x: enemy.x,
+    y: enemy.y + 22,
+
+    vx: dx / len * speed,
+    vy: dy / len * speed,
+
+    radius: 9,
+
+    life: 6
+  };
+
+  enemy.discRecovered = false;
+
+  enemy.throwCooldown =
+    Math.max(
+      .7,
+      1.4 - round * .035
+    );
+}
+
+
+/* =========================================================
+   DISC UPDATE
+   ========================================================= */
+
+function updateDisc(disc, dt) {
+
+  disc.x += disc.vx * dt;
+  disc.y += disc.vy * dt;
+
+  disc.life -= dt;
+
+
+  const leftWall = 18;
+  const rightWall = W - 18;
+
+  const topWall = arenaTop();
+  const bottomWall = arenaBottom();
+
+
+  if (disc.x - disc.radius < leftWall) {
+
+    disc.x = leftWall + disc.radius;
+    disc.vx = Math.abs(disc.vx);
+
+    createBurst(
+      disc.x,
+      disc.y,
+      disc.owner === "player"
+        ? "#48e8ff"
+        : "#ff536d",
+      4
+    );
+  }
+
+
+  if (disc.x + disc.radius > rightWall) {
+
+    disc.x = rightWall - disc.radius;
+    disc.vx = -Math.abs(disc.vx);
+
+    createBurst(
+      disc.x,
+      disc.y,
+      disc.owner === "player"
+        ? "#48e8ff"
+        : "#ff536d",
+      4
+    );
+  }
+
+
+  if (disc.y - disc.radius < topWall) {
+
+    disc.y = topWall + disc.radius;
+    disc.vy = Math.abs(disc.vy);
+
+    createBurst(
+      disc.x,
+      disc.y,
+      disc.owner === "player"
+        ? "#48e8ff"
+        : "#ff536d",
+      4
+    );
+  }
+
+
+  if (disc.y + disc.radius > bottomWall) {
+
+    disc.y = bottomWall - disc.radius;
+    disc.vy = -Math.abs(disc.vy);
+
+    createBurst(
+      disc.x,
+      disc.y,
+      disc.owner === "player"
+        ? "#48e8ff"
+        : "#ff536d",
+      4
+    );
+  }
+}
+
+
+/* =========================================================
+   COLLISION HELPERS
+   ========================================================= */
+
+function circleHitsOval(disc, target) {
+
+  const dx =
+    disc.x - target.x;
+
+  const dy =
+    disc.y - target.y;
+
+  const rx =
+    target.radiusX + disc.radius;
+
+  const ry =
+    target.radiusY + disc.radius;
 
   return (
-    arenaTop() +
-    arenaBottom()
-  ) / 2;
-
+    (dx * dx) / (rx * rx) +
+    (dy * dy) / (ry * ry)
+  ) <= 1;
 }
 
 
-/*
-   BLUE PLAYER:
+/* =========================================================
+   PLAYER DISC COLLISION
+   ========================================================= */
 
-   Bottom half
-*/
+function checkPlayerDiscCollision() {
 
-function playerTopLimit() {
+  if (!playerDisc) return;
 
-  return centerLine() + 18;
+  if (
+    circleHitsOval(
+      playerDisc,
+      enemy
+    )
+  ) {
 
+    createBurst(
+      enemy.x,
+      enemy.y,
+      getEnemyColor(),
+      18
+    );
+
+    score += 100;
+
+    damageEnemy();
+
+    playerDisc = null;
+  }
 }
 
 
-function playerBottomLimit() {
+/* =========================================================
+   ENEMY DISC COLLISION
+   ========================================================= */
 
-  return arenaBottom() - 22;
+function checkEnemyDiscCollision() {
 
+  if (!enemyDisc) return;
+
+  if (
+    circleHitsOval(
+      enemyDisc,
+      player
+    )
+  ) {
+
+    /*
+      Blocking catches/deflects the disc.
+    */
+
+    if (player.blocking) {
+
+      score += 25;
+
+      enemy.discRecovered = true;
+
+      createBurst(
+        player.x,
+        player.y,
+        "#ffe34d",
+        18
+      );
+
+      /*
+        Send disc back toward enemy.
+      */
+
+      const dx =
+        enemy.x - player.x;
+
+      const dy =
+        enemy.y - player.y;
+
+      const len =
+        Math.sqrt(dx * dx + dy * dy) || 1;
+
+      const speed = 450;
+
+      enemyDisc.vx =
+        dx / len * speed;
+
+      enemyDisc.vy =
+        dy / len * speed;
+
+      /*
+        Keep it alive after block.
+      */
+
+      enemyDisc.life = 5;
+
+      /*
+        Transfer ownership so it can
+        damage the enemy.
+      */
+
+      enemyDisc.owner = "player";
+
+      playerDisc = enemyDisc;
+      enemyDisc = null;
+
+      updateHUD();
+
+      return;
+    }
+
+
+    /*
+      Player gets hit.
+      Enemy has recovered its disc.
+    */
+
+    enemy.discRecovered = true;
+
+    enemyDisc = null;
+
+    damagePlayer();
+  }
 }
 
 
-/*
-   RED ENEMY:
+/* =========================================================
+   DAMAGE
+   ========================================================= */
 
-   Top half
-*/
+function damagePlayer() {
 
-function enemyTopLimit() {
+  if (player.invincible > 0) return;
 
-  return arenaTop() + 22;
+  energy -= 25;
 
-}
+  player.invincible = .7;
 
-
-function enemyBottomLimit() {
-
-  return centerLine() - 18;
-
-}
-
-
-/* =========================
-   UTILITIES
-========================= */
-
-function clamp(
-  v,
-  min,
-  max
-) {
-
-  return Math.max(
-    min,
-    Math.min(max, v)
+  createBurst(
+    player.x,
+    player.y,
+    "#ff536d",
+    25
   );
 
+  updateHUD();
+
+  if (energy <= 0) {
+
+    energy = 0;
+
+    updateHUD();
+
+    endGame();
+  }
 }
 
 
-function distance(a, b) {
+function damageEnemy() {
 
-  return Math.hypot(
-    a.x - b.x,
-    a.y - b.y
+  round++;
+
+  score += 150;
+
+  energy =
+    Math.min(
+      100,
+      energy + 15
+    );
+
+  enemy = createEnemy();
+
+  enemy.speed =
+    145 + Math.min(round * 7, 90);
+
+  playerDisc = null;
+  enemyDisc = null;
+
+  createBurst(
+    enemy.x,
+    enemy.y,
+    getEnemyColor(),
+    30
   );
 
+  updateHUD();
 }
 
 
-function angleTo(a, b) {
+/* =========================================================
+   ENEMY COLOR
+   ========================================================= */
 
-  return Math.atan2(
-    b.y - a.y,
-    b.x - a.x
-  );
+function getEnemyColor() {
 
+  const elapsed =
+    (performance.now() - gameStartTime) / 1000;
+
+  if (elapsed < 60) {
+    return "#ff536d";
+  }
+
+  if (elapsed < 65) {
+    return "#ffe34d";
+  }
+
+  return "#ff8a3d";
 }
 
 
-function spawnParticle(
+/* =========================================================
+   PARTICLES
+   ========================================================= */
+
+function createBurst(
   x,
   y,
-  amount = 8
+  color,
+  count
 ) {
 
-  for (
-    let i = 0;
-    i < amount;
-    i++
-  ) {
+  for (let i = 0; i < count; i++) {
 
     const angle =
       Math.random() *
@@ -745,9 +1534,8 @@ function spawnParticle(
       2;
 
     const speed =
-      40 +
-      Math.random() *
-      180;
+      30 +
+      Math.random() * 130;
 
     particles.push({
 
@@ -763,1087 +1551,55 @@ function spawnParticle(
         speed,
 
       life:
-        .4 +
+        .25 +
         Math.random() *
         .5,
 
       maxLife:
-        .4 +
-        Math.random() *
-        .5
+        .75,
 
+      size:
+        1.5 +
+        Math.random() * 3,
+
+      color
     });
-
   }
-
 }
 
 
-/* =========================
-   ENEMY COLOR
-========================= */
-
-function getEnemyColor() {
-
-  if (gameTime < 60) {
-
-    return "#ff536d";
-
-  }
-
-  if (gameTime < 65) {
-
-    return "#ffe34d";
-
-  }
-
-  return "#ff8a3d";
-
-}
-
-
-/* =========================
-   KEEP PLAYERS ON SIDES
-========================= */
-
-function keepPlayersOnTheirSides() {
-
-  if (!player || !enemy) {
-    return;
-  }
-
-
-  /* Blue player = bottom */
-
-  player.x =
-    clamp(
-      player.x,
-      42,
-      W - 42
-    );
-
-  player.y =
-    clamp(
-      player.y,
-      playerTopLimit(),
-      playerBottomLimit()
-    );
-
-
-  /* Red enemy = top */
-
-  enemy.x =
-    clamp(
-      enemy.x,
-      42,
-      W - 42
-    );
-
-  enemy.y =
-    clamp(
-      enemy.y,
-      enemyTopLimit(),
-      enemyBottomLimit()
-    );
-
-}
-
-
-/* =========================
-   DISC
-========================= */
-
-function createDisc(
-  owner,
-  x,
-  y,
-  angle
-) {
-
-  projectiles.push({
-
-    owner,
-
-    x,
-    y,
-
-    vx:
-      Math.cos(angle) *
-      430,
-
-    vy:
-      Math.sin(angle) *
-      430,
-
-    radius: 11,
-
-    life: 3,
-
-    angle,
-
-    spin: 0
-
-  });
-
-}
-
-
-function hasActiveDisc(owner) {
-
-  return projectiles.some(
-    p => p.owner === owner
-  );
-
-}
-
-
-/* =========================
-   RESET
-========================= */
-
-function resetGame() {
-
-  score = 0;
-
-  round = 1;
-
-  energy = 100;
-
-  gameTime = 0;
-
-  particles = [];
-
-  projectiles = [];
-
-
-  const middle =
-    centerLine();
-
-
-  /* =========================
-     BLUE PLAYER
-     BOTTOM
-  ========================= */
-
-  player = {
-
-    x:
-      W / 2,
-
-    y:
-      middle +
-      arenaHeight() * .25,
-
-    radius: 14,
-
-    speed: 255,
-
-    dashCooldown: 0,
-
-    invincible: 0
-
-  };
-
-
-  /* =========================
-     RED ENEMY
-     TOP
-  ========================= */
-
-  enemy = {
-
-    x:
-      W / 2,
-
-    y:
-      middle -
-      arenaHeight() * .25,
-
-    radius: 14,
-
-    speed: 145,
-
-    cooldown: 1.3,
-
-    health: 3,
-
-    maxHealth: 3,
-
-    hitFlash: 0,
-
-    discRecovered: true
-
-  };
-
-
-  keepPlayersOnTheirSides();
-
-  updateHUD();
-
-}
-
-
-/* =========================
-   PLAYER THROW
-========================= */
-
-function throwDisc() {
-
-  if (!running)
-    return;
-
-
-  if (
-    hasActiveDisc("player")
-  ) {
-
-    return;
-
-  }
-
-
-  /*
-     Always throw toward
-     the red player.
-  */
-
-  const angle =
-    angleTo(
-      player,
-      enemy
-    );
-
-
-  createDisc(
-
-    "player",
-
-    player.x +
-      Math.cos(angle) * 20,
-
-    player.y +
-      Math.sin(angle) * 20,
-
-    angle
-
-  );
-
-
-  spawnParticle(
-
-    player.x +
-      Math.cos(angle) * 20,
-
-    player.y +
-      Math.sin(angle) * 20,
-
-    5
-
-  );
-
-}
-
-
-/* =========================
-   DASH
-========================= */
-
-function dash() {
-
-  if (!running)
-    return;
-
-
-  if (
-    player.dashCooldown > 0
-  ) {
-
-    return;
-
-  }
-
-
-  let dx =
-    joystickX;
-
-  let dy =
-    joystickY;
-
-
-  if (
-    Math.abs(dx) +
-    Math.abs(dy) <
-    .1
-  ) {
-
-    /*
-       Default dash is
-       straight backward.
-    */
-
-    dx = 0;
-
-    dy = 1;
-
-  }
-
-
-  const length =
-    Math.hypot(
-      dx,
-      dy
-    ) || 1;
-
-
-  player.x +=
-    (dx / length) *
-    95;
-
-
-  player.y +=
-    (dy / length) *
-    95;
-
-
-  player.x =
-    clamp(
-      player.x,
-      42,
-      W - 42
-    );
-
-
-  player.y =
-    clamp(
-      player.y,
-      playerTopLimit(),
-      playerBottomLimit()
-    );
-
-
-  player.invincible =
-    .35;
-
-
-  player.dashCooldown =
-    1;
-
-
-  spawnParticle(
-    player.x,
-    player.y,
-    18
-  );
-
-}
-
-
-/* =========================
-   ENEMY ATTACK
-========================= */
-
-function enemyAttack() {
-
-  if (
-    !enemy.discRecovered
-  ) {
-
-    return;
-
-  }
-
-
-  if (
-    hasActiveDisc("enemy")
-  ) {
-
-    return;
-
-  }
-
-
-  /*
-     Enemy throws toward
-     the blue player.
-  */
-
-  const angle =
-    angleTo(
-      enemy,
-      player
-    );
-
-
-  createDisc(
-
-    "enemy",
-
-    enemy.x +
-      Math.cos(angle) * 20,
-
-    enemy.y +
-      Math.sin(angle) * 20,
-
-    angle
-
-  );
-
-
-  enemy.discRecovered =
-    false;
-
-
-  enemy.cooldown =
-    Math.max(
-      .65,
-      1.5 -
-      round * .08
-    );
-
-}
-
-
-/* =========================
-   DEFEAT ENEMY
-========================= */
-
-function defeatEnemy() {
-
-  score +=
-    100 * round;
-
-
-  spawnParticle(
-    enemy.x,
-    enemy.y,
-    40
-  );
-
-
-  round++;
-
-
-  enemy.health =
-    Math.min(
-      8,
-      2 +
-      Math.floor(
-        round / 2
-      )
-    );
-
-
-  enemy.maxHealth =
-    enemy.health;
-
-
-  /*
-     Respawn RED at top center.
-  */
-
-  enemy.x =
-    W / 2;
-
-
-  enemy.y =
-    centerLine() -
-    arenaHeight() * .25;
-
-
-  enemy.speed =
-    135 +
-    round * 10;
-
-
-  enemy.discRecovered =
-    true;
-
-
-  enemy.cooldown =
-    .9;
-
-
-  /*
-     Small reward for winning
-     a round.
-  */
-
-  energy =
-    Math.min(
-      100,
-      energy + 15
-    );
-
-
-  keepPlayersOnTheirSides();
-
-  updateHUD();
-
-}
-
-
-/* =========================
-   UPDATE
-========================= */
-
-function update(dt) {
-
-  if (!running)
-    return;
-
-
-  gameTime += dt;
-
-
-  player.dashCooldown =
-    Math.max(
-      0,
-      player.dashCooldown - dt
-    );
-
-
-  player.invincible =
-    Math.max(
-      0,
-      player.invincible - dt
-    );
-
-
-  enemy.cooldown =
-    Math.max(
-      0,
-      enemy.cooldown - dt
-    );
-
-
-  enemy.hitFlash =
-    Math.max(
-      0,
-      enemy.hitFlash - dt
-    );
-
-
-  /* =========================
-     PLAYER MOVEMENT
-  ========================= */
-
-  const joystickMagnitude =
-    Math.hypot(
-      joystickX,
-      joystickY
-    );
-
-
-  if (
-    joystickMagnitude > .05
-  ) {
-
-    player.x +=
-      joystickX *
-      player.speed *
-      dt;
-
-    player.y +=
-      joystickY *
-      player.speed *
-      dt;
-
-  }
-
-
-  /*
-     BLUE CANNOT ENTER
-     RED'S SIDE.
-  */
-
-  player.x =
-    clamp(
-      player.x,
-      42,
-      W - 42
-    );
-
-
-  player.y =
-    clamp(
-      player.y,
-      playerTopLimit(),
-      playerBottomLimit()
-    );
-
-
-  /* =========================
-     ENEMY AI
-  ========================= */
-
-  const dist =
-    distance(
-      player,
-      enemy
-    );
-
-
-  /*
-     RED moves horizontally
-     to line up with BLUE.
-
-     It can also move slightly
-     vertically inside its own
-     half, but never crosses
-     the center.
-  */
-
-  const horizontalDifference =
-    player.x -
-    enemy.x;
-
-
-  if (
-    Math.abs(horizontalDifference) > 18
-  ) {
-
-    enemy.x +=
-      Math.sign(
-        horizontalDifference
-      ) *
-      enemy.speed *
-      dt;
-
-  }
-
-
-  /*
-     Keep the enemy moving
-     around its top zone instead
-     of directly chasing through
-     the center.
-  */
-
-  const desiredEnemyY =
-    centerLine() -
-    arenaHeight() * .28;
-
-
-  if (
-    enemy.y <
-    desiredEnemyY - 25
-  ) {
-
-    enemy.y +=
-      enemy.speed *
-      .35 *
-      dt;
-
-  }
-  else if (
-    enemy.y >
-    desiredEnemyY + 25
-  ) {
-
-    enemy.y -=
-      enemy.speed *
-      .35 *
-      dt;
-
-  }
-
-
-  enemy.x =
-    clamp(
-      enemy.x,
-      42,
-      W - 42
-    );
-
-
-  enemy.y =
-    clamp(
-      enemy.y,
-      enemyTopLimit(),
-      enemyBottomLimit()
-    );
-
-
-  /* =========================
-     ENEMY ATTACK
-  ========================= */
-
-  if (
-    enemy.cooldown <= 0 &&
-    dist < 620 &&
-    !hasActiveDisc("enemy") &&
-    enemy.discRecovered
-  ) {
-
-    enemyAttack();
-
-  }
-
-
-  /* =========================
-     PROJECTILES
-  ========================= */
+function updateParticles(dt) {
 
   for (
-    let i =
-      projectiles.length - 1;
-
+    let i = particles.length - 1;
     i >= 0;
-
     i--
   ) {
 
-    const p =
-      projectiles[i];
+    const p = particles[i];
 
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
 
-    p.x +=
-      p.vx *
-      dt;
-
-
-    p.y +=
-      p.vy *
-      dt;
-
+    p.vx *= .97;
+    p.vy *= .97;
 
     p.life -= dt;
 
-
-    p.angle +=
-      12 *
-      dt;
-
-
-    /* =========================
-       SIDE WALLS
-    ========================= */
-
-    if (
-      p.x < 30 ||
-      p.x > W - 30
-    ) {
-
-      p.vx *= -1;
-
-      p.x =
-        clamp(
-          p.x,
-          30,
-          W - 30
-        );
-
+    if (p.life <= 0) {
+      particles.splice(i, 1);
     }
-
-
-    /* =========================
-       TOP / BOTTOM WALLS
-    ========================= */
-
-    if (
-      p.y < arenaTop() ||
-      p.y > arenaBottom()
-    ) {
-
-      p.vy *= -1;
-
-      p.y =
-        clamp(
-          p.y,
-          arenaTop(),
-          arenaBottom()
-        );
-
-    }
-
-
-    /* =========================
-       ENEMY CATCHES DISC
-    ========================= */
-
-    if (
-      p.owner === "enemy" &&
-      distance(
-        p,
-        enemy
-      ) <
-      p.radius +
-      enemy.radius
-    ) {
-
-      enemy.discRecovered =
-        true;
-
-
-      spawnParticle(
-        p.x,
-        p.y,
-        10
-      );
-
-
-      projectiles.splice(
-        i,
-        1
-      );
-
-
-      continue;
-
-    }
-
-
-    /* =========================
-       PLAYER DISC HITS ENEMY
-    ========================= */
-
-    if (
-      p.owner === "player" &&
-      distance(
-        p,
-        enemy
-      ) <
-      p.radius +
-      enemy.radius
-    ) {
-
-      enemy.health--;
-
-      enemy.hitFlash =
-        .15;
-
-
-      spawnParticle(
-        p.x,
-        p.y,
-        14
-      );
-
-
-      projectiles.splice(
-        i,
-        1
-      );
-
-
-      if (
-        enemy.health <= 0
-      ) {
-
-        defeatEnemy();
-
-      }
-
-
-      continue;
-
-    }
-
-
-    /* =========================
-       ENEMY DISC HITS PLAYER
-    ========================= */
-
-    if (
-      p.owner === "enemy" &&
-      distance(
-        p,
-        player
-      ) <
-      p.radius +
-      player.radius
-    ) {
-
-      /*
-         Enemy gets its disc
-         back after contact.
-      */
-
-      enemy.discRecovered =
-        true;
-
-
-      if (blocking) {
-
-        score += 25;
-
-
-        spawnParticle(
-          p.x,
-          p.y,
-          12
-        );
-
-
-        projectiles.splice(
-          i,
-          1
-        );
-
-
-        updateHUD();
-
-        continue;
-
-      }
-
-
-      if (
-        player.invincible <= 0
-      ) {
-
-        energy -= 25;
-
-
-        spawnParticle(
-          player.x,
-          player.y,
-          18
-        );
-
-
-        projectiles.splice(
-          i,
-          1
-        );
-
-
-        if (
-          energy <= 0
-        ) {
-
-          energy = 0;
-
-          endGame();
-
-        }
-
-
-        updateHUD();
-
-        continue;
-
-      }
-
-    }
-
-
-    /* =========================
-       DISC LIFETIME
-    ========================= */
-
-    if (
-      p.life <= 0
-    ) {
-
-      projectiles.splice(
-        i,
-        1
-      );
-
-    }
-
   }
-
-
-  /* =========================
-     PARTICLES
-  ========================= */
-
-  for (
-    let i =
-      particles.length - 1;
-
-    i >= 0;
-
-    i--
-  ) {
-
-    const p =
-      particles[i];
-
-
-    p.x +=
-      p.vx *
-      dt;
-
-
-    p.y +=
-      p.vy *
-      dt;
-
-
-    p.vx *= .94;
-
-    p.vy *= .94;
-
-
-    p.life -= dt;
-
-
-    if (
-      p.life <= 0
-    ) {
-
-      particles.splice(
-        i,
-        1
-      );
-
-    }
-
-  }
-
-
-  updateHUD();
-
 }
 
 
-/* =========================
-   DRAW ARENA
-========================= */
+/* =========================================================
+   DRAW BACKGROUND
+   ========================================================= */
 
-function drawArena() {
+function drawBackground() {
 
-  ctx.clearRect(
-    0,
-    0,
-    W,
-    H
-  );
-
-
-  const gradient =
-    ctx.createRadialGradient(
-
-      W / 2,
-      H / 2,
-      30,
-
-      W / 2,
-      H / 2,
-      Math.max(W, H) *
-      .7
-
-    );
-
-
-  gradient.addColorStop(
-    0,
-    "#111b26"
-  );
-
-
-  gradient.addColorStop(
-    1,
-    "#02060a"
-  );
-
-
-  ctx.fillStyle =
-    gradient;
-
+  ctx.fillStyle = "#05070d";
 
   ctx.fillRect(
     0,
@@ -1853,366 +1609,219 @@ function drawArena() {
   );
 
 
-  const top =
-    arenaTop();
+  /*
+    Subtle glow in arena.
+  */
 
-  const bottom =
-    arenaBottom();
+  const gradient =
+    ctx.createRadialGradient(
+      W / 2,
+      centerLine(),
+      20,
+      W / 2,
+      centerLine(),
+      Math.max(W, H) * .7
+    );
 
-  const middle =
-    centerLine();
+  gradient.addColorStop(
+    0,
+    "rgba(30,55,80,.20)"
+  );
+
+  gradient.addColorStop(
+    1,
+    "rgba(0,0,0,0)"
+  );
+
+  ctx.fillStyle = gradient;
+
+  ctx.fillRect(
+    0,
+    0,
+    W,
+    H
+  );
+}
 
 
-  /* =========================
-     GRID
-  ========================= */
+/* =========================================================
+   DRAW GRID
+   ========================================================= */
+
+function drawGrid() {
+
+  const top = arenaTop();
+  const bottom = arenaBottom();
 
   ctx.save();
 
-
   ctx.strokeStyle =
-    "rgba(80,180,220,.15)";
+    "rgba(72,232,255,.055)";
 
   ctx.lineWidth = 1;
 
+  const spacing = 32;
 
   for (
-    let x = 20;
+    let x = 18;
     x < W;
-    x += 35
+    x += spacing
   ) {
 
     ctx.beginPath();
 
-    ctx.moveTo(
-      x,
-      top
-    );
-
-    ctx.lineTo(
-      x,
-      bottom
-    );
+    ctx.moveTo(x, top);
+    ctx.lineTo(x, bottom);
 
     ctx.stroke();
-
   }
 
 
   for (
     let y = top;
     y < bottom;
-    y += 35
+    y += spacing
   ) {
 
     ctx.beginPath();
 
-    ctx.moveTo(
-      20,
-      y
-    );
-
-    ctx.lineTo(
-      W - 20,
-      y
-    );
+    ctx.moveTo(18, y);
+    ctx.lineTo(W - 18, y);
 
     ctx.stroke();
-
   }
 
-
   ctx.restore();
+}
 
 
-  /* =========================
-     ARENA BORDER
-  ========================= */
+/* =========================================================
+   DRAW ARENA
+   ========================================================= */
+
+function drawArena() {
+
+  const top = arenaTop();
+  const bottom = arenaBottom();
+  const middle = centerLine();
 
   ctx.save();
 
 
+  /*
+    Arena border
+  */
+
   ctx.strokeStyle =
-    "rgba(0,190,255,.55)";
+    "rgba(72,232,255,.25)";
 
-  ctx.lineWidth = 2;
-
+  ctx.lineWidth = 1.5;
 
   ctx.strokeRect(
-    25,
+    18,
     top,
-    W - 50,
+    W - 36,
     bottom - top
   );
 
 
-  ctx.strokeStyle =
-    "rgba(0,190,255,.08)";
+  /*
+    Center divider
+  */
 
-  ctx.lineWidth = 12;
-
-
-  ctx.strokeRect(
-    25,
-    top,
-    W - 50,
-    bottom - top
-  );
-
-
-  ctx.restore();
-
-
-  /* =========================
-     CENTER DIVIDER
-  ========================= */
-
-  ctx.save();
-
+  ctx.setLineDash([9, 9]);
 
   ctx.strokeStyle =
     "rgba(255,255,255,.28)";
 
-  ctx.lineWidth = 2;
-
-
-  ctx.setLineDash([
-    12,
-    10
-  ]);
-
+  ctx.lineWidth = 1;
 
   ctx.beginPath();
 
-  ctx.moveTo(
-    28,
-    middle
-  );
-
-  ctx.lineTo(
-    W - 28,
-    middle
-  );
+  ctx.moveTo(18, middle);
+  ctx.lineTo(W - 18, middle);
 
   ctx.stroke();
-
 
   ctx.setLineDash([]);
 
 
   /*
-     Center glow
+    Labels
   */
 
-  ctx.strokeStyle =
-    "rgba(255,255,255,.07)";
-
-  ctx.lineWidth = 10;
-
-
-  ctx.beginPath();
-
-  ctx.moveTo(
-    28,
-    middle
-  );
-
-  ctx.lineTo(
-    W - 28,
-    middle
-  );
-
-  ctx.stroke();
-
-
-  ctx.restore();
-
-
-  /* =========================
-     SIDE LABELS
-  ========================= */
-
-  ctx.save();
-
-  ctx.textAlign =
-    "center";
-
   ctx.font =
-    "bold 10px Arial";
+    "900 9px Arial";
 
-  ctx.letterSpacing =
-    "3px";
+  ctx.letterSpacing = "2px";
 
+  ctx.textAlign = "center";
 
   ctx.fillStyle =
     "rgba(255,83,109,.45)";
 
-
   ctx.fillText(
     "RED SIDE",
     W / 2,
-    top + 25
+    top + 18
   );
 
-
   ctx.fillStyle =
-    "rgba(93,231,255,.45)";
-
+    "rgba(72,232,255,.4)";
 
   ctx.fillText(
     "BLUE SIDE",
     W / 2,
-    bottom - 18
+    bottom - 10
   );
 
 
   ctx.restore();
-
 }
 
 
-/* =========================
-   DRAW DISC
-========================= */
+/* =========================================================
+   DRAW CHARACTER
+   ========================================================= */
 
-function drawDisc(
-  x,
-  y,
-  angle,
-  enemyDisc = false
+function drawCharacter(
+  entity,
+  color,
+  isPlayer
 ) {
 
   ctx.save();
 
-
   ctx.translate(
-    x,
-    y
+    entity.x,
+    entity.y
   );
 
 
-  ctx.rotate(
-    angle
-  );
+  /*
+    Glow
+  */
 
-
-  const color =
-    enemyDisc
-      ? getEnemyColor()
-      : "#5de7ff";
-
-
+  ctx.shadowColor = color;
   ctx.shadowBlur =
-    18;
+    entity.invincible > 0
+      ? 30
+      : 18;
 
 
-  ctx.shadowColor =
-    color;
+  /*
+    Main vertical oval
+  */
 
-
-  ctx.strokeStyle =
-    color;
-
-
-  ctx.lineWidth = 4;
-
-
-  ctx.beginPath();
-
-
-  ctx.arc(
-    0,
-    0,
-    12,
-    0,
-    Math.PI * 2
-  );
-
-
-  ctx.stroke();
-
-
-  ctx.beginPath();
-
-
-  ctx.moveTo(
-    -7,
-    0
-  );
-
-
-  ctx.lineTo(
-    7,
-    0
-  );
-
-
-  ctx.stroke();
-
-
-  ctx.restore();
-
-}
-
-
-/* =========================
-   DRAW PLAYER
-========================= */
-
-function drawPlayer() {
-
-  ctx.save();
-
-
-  ctx.translate(
-    player.x,
-    player.y
-  );
-
-
-  ctx.shadowBlur =
-    20;
-
-
-  ctx.shadowColor =
-    "#35d9ff";
-
-
-  ctx.strokeStyle =
-    "#5de7ff";
-
-
-  ctx.lineWidth = 3;
-
-
-  /* BLUE OVAL */
+  ctx.fillStyle = color;
 
   ctx.beginPath();
 
   ctx.ellipse(
     0,
     0,
-    11,
-    17,
-    0,
-    0,
-    Math.PI * 2
-  );
-
-  ctx.stroke();
-
-
-  ctx.fillStyle =
-    "#07131b";
-
-
-  ctx.beginPath();
-
-  ctx.ellipse(
-    0,
-    0,
-    8,
-    14,
+    entity.radiusX,
+    entity.radiusY,
     0,
     0,
     Math.PI * 2
@@ -2222,140 +1831,142 @@ function drawPlayer() {
 
 
   /*
-     Direction marker points
-     upward toward enemy.
+    Inner core
   */
 
-  ctx.fillStyle =
-    "#5de7ff";
+  ctx.shadowBlur = 0;
 
+  ctx.fillStyle =
+    "rgba(255,255,255,.28)";
 
   ctx.beginPath();
 
-
-  ctx.moveTo(
+  ctx.ellipse(
     0,
-    -20
+    -5,
+    entity.radiusX * .32,
+    entity.radiusY * .62,
+    0,
+    0,
+    Math.PI * 2
   );
-
-
-  ctx.lineTo(
-    -4,
-    -9
-  );
-
-
-  ctx.lineTo(
-    4,
-    -9
-  );
-
-
-  ctx.closePath();
-
 
   ctx.fill();
 
 
-  /* BLOCK RING */
+  /*
+    Direction indicator
+  */
 
-  if (blocking) {
+  ctx.fillStyle =
+    "rgba(255,255,255,.9)";
+
+  ctx.beginPath();
+
+  if (isPlayer) {
+
+    ctx.moveTo(0, -34);
+    ctx.lineTo(-5, -25);
+    ctx.lineTo(5, -25);
+
+  } else {
+
+    ctx.moveTo(0, 34);
+    ctx.lineTo(-5, 25);
+    ctx.lineTo(5, 25);
+  }
+
+  ctx.closePath();
+
+  ctx.fill();
+
+
+  /*
+    Block ring
+  */
+
+  if (
+    isPlayer &&
+    player.blocking
+  ) {
 
     ctx.strokeStyle =
-      "#ffffff";
+      "#ffe34d";
 
+    ctx.lineWidth = 3;
 
-    ctx.lineWidth = 5;
+    ctx.shadowColor =
+      "#ffe34d";
 
+    ctx.shadowBlur = 18;
 
     ctx.beginPath();
-
 
     ctx.ellipse(
       0,
       0,
-      17,
-      24,
+      entity.radiusX + 10,
+      entity.radiusY + 10,
       0,
       0,
       Math.PI * 2
     );
 
-
     ctx.stroke();
-
   }
 
 
   ctx.restore();
-
 }
 
 
-/* =========================
-   DRAW ENEMY
-========================= */
+/* =========================================================
+   DRAW DISC
+   ========================================================= */
 
-function drawEnemy() {
+function drawDisc(
+  disc
+) {
 
-  const enemyColor =
-    getEnemyColor();
+  if (!disc) return;
+
+  const color =
+    disc.owner === "player"
+      ? "#48e8ff"
+      : getEnemyColor();
 
 
   ctx.save();
 
-
   ctx.translate(
-    enemy.x,
-    enemy.y
+    disc.x,
+    disc.y
   );
 
+  ctx.rotate(
+    Math.atan2(
+      disc.vy,
+      disc.vx
+    )
+  );
 
-  ctx.shadowBlur =
-    20;
-
-
-  ctx.shadowColor =
-    enemyColor;
-
-
-  ctx.strokeStyle =
-    enemy.hitFlash > 0
-      ? "#ffffff"
-      : enemyColor;
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 22;
 
 
-  ctx.lineWidth = 3;
+  /*
+    Disc body
+  */
 
-
-  /* RED OVAL */
+  ctx.fillStyle = color;
 
   ctx.beginPath();
 
   ctx.ellipse(
     0,
     0,
-    11,
-    17,
-    0,
-    0,
-    Math.PI * 2
-  );
-
-  ctx.stroke();
-
-
-  ctx.fillStyle =
-    "#17080d";
-
-
-  ctx.beginPath();
-
-  ctx.ellipse(
-    0,
-    0,
-    8,
-    14,
+    13,
+    5,
     0,
     0,
     Math.PI * 2
@@ -2365,529 +1976,212 @@ function drawEnemy() {
 
 
   /*
-     Enemy points downward
-     toward the blue player.
+    Bright edge
   */
 
-  ctx.fillStyle =
-    enemyColor;
+  ctx.strokeStyle =
+    "rgba(255,255,255,.8)";
 
+  ctx.lineWidth = 1.5;
+
+  ctx.stroke();
+
+
+  /*
+    Center
+  */
+
+  ctx.shadowBlur = 0;
+
+  ctx.fillStyle =
+    "rgba(255,255,255,.8)";
 
   ctx.beginPath();
 
-
-  ctx.moveTo(
+  ctx.arc(
     0,
-    20
+    0,
+    2,
+    0,
+    Math.PI * 2
   );
-
-
-  ctx.lineTo(
-    -4,
-    9
-  );
-
-
-  ctx.lineTo(
-    4,
-    9
-  );
-
-
-  ctx.closePath();
-
 
   ctx.fill();
 
-
   ctx.restore();
-
-
-  /* =========================
-     ENEMY HEALTH
-  ========================= */
-
-  const width = 70;
-
-
-  const healthRatio =
-    enemy.health /
-    enemy.maxHealth;
-
-
-  ctx.fillStyle =
-    "rgba(0,0,0,.5)";
-
-
-  ctx.fillRect(
-
-    enemy.x -
-      width / 2,
-
-    enemy.y -
-      29,
-
-    width,
-
-    5
-
-  );
-
-
-  ctx.fillStyle =
-    enemyColor;
-
-
-  ctx.fillRect(
-
-    enemy.x -
-      width / 2,
-
-    enemy.y -
-      29,
-
-    width *
-      healthRatio,
-
-    5
-
-  );
-
 }
 
 
-/* =========================
-   PARTICLES
-========================= */
+/* =========================================================
+   DRAW PARTICLES
+   ========================================================= */
 
 function drawParticles() {
 
-  for (
-    const p of particles
-  ) {
+  for (const p of particles) {
 
     const alpha =
-      clamp(
-        p.life /
-        p.maxLife,
+      Math.max(
         0,
-        1
+        p.life / p.maxLife
       );
 
+    ctx.save();
 
-    ctx.fillStyle =
-      `rgba(100,220,255,${alpha})`;
+    ctx.globalAlpha = alpha;
 
+    ctx.fillStyle = p.color;
+
+    ctx.shadowColor = p.color;
+    ctx.shadowBlur = 8;
 
     ctx.beginPath();
-
 
     ctx.arc(
       p.x,
       p.y,
-      2,
+      p.size,
       0,
       Math.PI * 2
     );
 
-
     ctx.fill();
 
+    ctx.restore();
   }
-
 }
 
 
-/* =========================
+/* =========================================================
    DRAW
-========================= */
+   ========================================================= */
 
 function draw() {
 
+  drawBackground();
+  drawGrid();
   drawArena();
 
+  if (player) {
 
-  for (
-    const p of projectiles
-  ) {
-
-    drawDisc(
-
-      p.x,
-
-      p.y,
-
-      p.angle,
-
-      p.owner === "enemy"
-
+    drawCharacter(
+      player,
+      "#48e8ff",
+      true
     );
-
   }
 
+  if (enemy) {
+
+    drawCharacter(
+      enemy,
+      getEnemyColor(),
+      false
+    );
+  }
+
+  drawDisc(playerDisc);
+  drawDisc(enemyDisc);
 
   drawParticles();
-
-
-  drawEnemy();
-
-  drawPlayer();
-
 }
 
 
-/* =========================
-   GAME LOOP
-========================= */
+/* =========================================================
+   GAME UPDATE
+   ========================================================= */
 
-function loop(timestamp) {
+function update(dt) {
+
+  if (!running) return;
+
+  updatePlayer(dt);
+
+  updateEnemy(dt);
+
+
+  if (playerDisc) {
+
+    updateDisc(
+      playerDisc,
+      dt
+    );
+
+    checkPlayerDiscCollision();
+
+    if (
+      playerDisc &&
+      playerDisc.life <= 0
+    ) {
+
+      playerDisc = null;
+    }
+  }
+
+
+  if (enemyDisc) {
+
+    updateDisc(
+      enemyDisc,
+      dt
+    );
+
+    checkEnemyDiscCollision();
+
+    if (
+      enemyDisc &&
+      enemyDisc.life <= 0
+    ) {
+
+      /*
+        Strict recovery rule:
+        if enemy's disc expires without
+        returning to it or hitting player,
+        enemy remains locked.
+      */
+
+      enemyDisc = null;
+    }
+  }
+
+
+  updateParticles(dt);
+
+  updateHUD();
+}
+
+
+/* =========================================================
+   GAME LOOP
+   ========================================================= */
+
+function gameLoop(now) {
 
   const dt =
     Math.min(
-
-      .033,
-
-      (
-        timestamp -
-        lastTime
-      ) / 1000 || 0
-
+      (now - lastTime) / 1000,
+      .033
     );
 
-
-  lastTime =
-    timestamp;
-
+  lastTime = now;
 
   update(dt);
 
   draw();
 
-
-  requestAnimationFrame(
-    loop
-  );
-
+  requestAnimationFrame(gameLoop);
 }
 
 
-requestAnimationFrame(
-  loop
-);
+requestAnimationFrame(gameLoop);
 
 
-/* =========================
-   HUD
-========================= */
-
-function updateHUD() {
-
-  roundText.textContent =
-    round;
-
-  scoreText.textContent =
-    score;
-
-  energyText.textContent =
-    energy;
-
-}
-
-
-/* =========================
-   START / END
-========================= */
-
-function startGame() {
-
-  resetGame();
-
-  running = true;
-
-  startScreen.style.display =
-    "none";
-
-  gameOver.style.display =
-    "none";
-
-}
-
-
-function endGame() {
-
-  running = false;
-
-
-  finalScore.textContent =
-    "SCORE " + score;
-
-
-  gameOver.style.display =
-    "flex";
-
-}
-
-
-/* =========================
-   JOYSTICK
-========================= */
-
-let joystickPointer =
-  null;
-
-
-function updateJoystick(e) {
-
-  const rect =
-    joystick.getBoundingClientRect();
-
-
-  const centerX =
-    rect.left +
-    rect.width / 2;
-
-
-  const centerY =
-    rect.top +
-    rect.height / 2;
-
-
-  let dx =
-    e.clientX -
-    centerX;
-
-
-  let dy =
-    e.clientY -
-    centerY;
-
-
-  const max =
-    rect.width *
-    .35;
-
-
-  const dist =
-    Math.hypot(
-      dx,
-      dy
-    );
-
-
-  if (dist > max) {
-
-    dx =
-      dx / dist *
-      max;
-
-    dy =
-      dy / dist *
-      max;
-
-  }
-
-
-  joystickX =
-    dx / max;
-
-
-  joystickY =
-    dy / max;
-
-
-  stick.style.transform =
-    `translate(${dx}px, ${dy}px)`;
-
-}
-
-
-joystick.addEventListener(
-  "pointerdown",
-  e => {
-
-    joystickPointer =
-      e.pointerId;
-
-
-    joystick.setPointerCapture(
-      e.pointerId
-    );
-
-
-    updateJoystick(e);
-
-  }
-);
-
-
-joystick.addEventListener(
-  "pointermove",
-  e => {
-
-    if (
-      e.pointerId ===
-      joystickPointer
-    ) {
-
-      updateJoystick(e);
-
-    }
-
-  }
-);
-
-
-function releaseJoystick(e) {
-
-  if (
-    e.pointerId !==
-    joystickPointer
-  ) {
-
-    return;
-
-  }
-
-
-  joystickPointer =
-    null;
-
-
-  joystickX = 0;
-
-  joystickY = 0;
-
-
-  stick.style.transform =
-    "translate(0,0)";
-
-}
-
-
-joystick.addEventListener(
-  "pointerup",
-  releaseJoystick
-);
-
-
-joystick.addEventListener(
-  "pointercancel",
-  releaseJoystick
-);
-
-
-/* =========================
-   BUTTONS
-========================= */
-
-throwBtn.addEventListener(
-  "pointerdown",
-  e => {
-
-    e.preventDefault();
-
-    throwDisc();
-
-  }
-);
-
-
-dashBtn.addEventListener(
-  "pointerdown",
-  e => {
-
-    e.preventDefault();
-
-    dash();
-
-  }
-);
-
-
-blockBtn.addEventListener(
-  "pointerdown",
-  e => {
-
-    e.preventDefault();
-
-    blocking = true;
-
-  }
-);
-
-
-blockBtn.addEventListener(
-  "pointerup",
-  () => {
-
-    blocking = false;
-
-  }
-);
-
-
-blockBtn.addEventListener(
-  "pointercancel",
-  () => {
-
-    blocking = false;
-
-  }
-);
-
-
-blockBtn.addEventListener(
-  "pointerleave",
-  () => {
-
-    blocking = false;
-
-  }
-);
-
-
-/* =========================
-   START BUTTONS
-========================= */
-
-document
-  .getElementById("startBtn")
-  .addEventListener(
-    "click",
-    startGame
-  );
-
-
-document
-  .getElementById("restartBtn")
-  .addEventListener(
-    "click",
-    startGame
-  );
-
-
-/* =========================
-   PREVENT IPHONE SCROLLING
-========================= */
-
-document.addEventListener(
-  "touchmove",
-  e => {
-
-    e.preventDefault();
-
-  },
-  {
-    passive: false
-  }
-);
-
-
-/* =========================
-   INITIALIZE
-========================= */
+/* =========================================================
+   INITIAL DRAW
+   ========================================================= */
 
 resetGame();
+draw();
 
 </script>
 
